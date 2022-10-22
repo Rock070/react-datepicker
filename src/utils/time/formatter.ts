@@ -1,4 +1,4 @@
-import { get } from '@/utils/get';
+import { get } from '@/utils/time/get';
 
 const formatter = (date: Date) => {
   const { y, m, d } = get(date);
