@@ -1,13 +1,20 @@
 import { useState, useMemo } from "react";
 import { Icon } from '@iconify/react';
-import { CALENDER_HEADER } from '@/helpers/const';
+import { CALENDER_HEADER, MONTH_NAMES, DAYS_NUM_IN_ONE_ROW } from '@/helpers/const';
+
 import add from '@/utils/time/add';
 import minus from '@/utils/time/minus';
+import isSame from '@/utils/time/isSame';
+import splitGroup from '@/utils/splitGroup';
+import pipe from '@/utils/pipe';
 
 import getCalendar from '@/helpers/getCalendar'
 import { get } from '@/utils/time/get';
 
 import BasicButton from '@/components/atoms/BasicButton'
+
+import type { DateBtn } from '@/types';
+
 const enum ViewMode {
   Calendar = 1,
   Year = 1 << 1,
@@ -17,31 +24,46 @@ const enum ViewMode {
 
 interface CalendarBodyProps {
   date: Date;
+  displayDate: Date;
+  selectDate: (date: Date) => void;
 }
 
 function CalendarBody (props: CalendarBodyProps) {
-  const{ date } = props;
+  const{ date, displayDate, selectDate } = props;
 
-  const calendar = getCalendar(date);
+  const calendar = getCalendar(displayDate);
+  const Step1Func = (calendar: DateBtn[]) => calendar.map(item => (
+    {
+      ...item,
+      clickFn: () => selectDate(item.date)
+    }
+  ))
+  const step2Func = (calendar: DateBtn[]) => splitGroup(calendar, DAYS_NUM_IN_ONE_ROW)
+  const pipeLine = pipe(Step1Func, step2Func)
+
+  const calendarDisplay = pipeLine(calendar) as DateBtn[][];
 
   return (
     <table>
       <thead>
         <tr>
-          { CALENDER_HEADER.map(item => <th key={item} >{ item }</th>) }
+          { CALENDER_HEADER.map(item => <th key={item} className="p-1 m-1" >{ item }</th>) }
         </tr>
       </thead>
       <tbody>
-        { calendar.map((group, index) =>
+        { calendarDisplay.map((group, index) =>
             <tr key={index} >
               {
                 group.map(item =>
                   <td
                     key={ item.timestamp }
+                    onClick={item.clickFn}
                     className={
                       `
-                        p-2 text-center hover:bg-gray-3 rounded-2 cursor-pointer select-none
+                        p-1 m-1
+                        text-center hover:bg-gray-3 rounded-1 cursor-pointer select-none
                         ${!item.isThisMonth && 'text-gray'}
+                        ${isSame(item.date, date) && 'bg-blue' }
                       `
                     }
                   >
@@ -57,32 +79,39 @@ function CalendarBody (props: CalendarBodyProps) {
   )
 }
 
+export interface BasicCalendarProps {
+  date: Date;
+  selectDate: (date: Date) => void;
+}
 
-export default function BasicCalendar () {
+export default function BasicCalendar (props: BasicCalendarProps) {
+  const { date, selectDate } = props;
+
+  const [displayDate, setDisplayDate] = useState(date);
+
   const [viewMode, changeViewMode] = useState<ViewMode>(1);
-  const [date, changeDate] = useState<Date>(new Date());
   const nowYearMonth = useMemo(() => {
-    const { y, m } = get(date);
-    return `${y} ${m + 1}`
-  }, [date])
+    const { y, m } = get(displayDate);
+
+    return `${MONTH_NAMES[m]} ${y}`
+  }, [displayDate])
 
   const clickLastMonth = () => {
-    changeDate(minus(date, { months: 1 }))
+    setDisplayDate(minus(displayDate, { months: 1 }))
   }
 
   const clickLastYear = () => {
-    changeDate(minus(date, { years: 1 }))
+    setDisplayDate(minus(displayDate, { years: 1 }))
   }
 
   const clickNextMonth = () => {
-    changeDate(add(date, { months: 1 }))
+    setDisplayDate(add(displayDate, { months: 1 }))
   }
 
   const clickNextYear = () => {
-    changeDate(add(date, { years: 1 }))
+    setDisplayDate(add(displayDate, { years: 1 }))
   }
 
-  const selectedDate = '';
 
   return (
     <div>
@@ -106,7 +135,7 @@ export default function BasicCalendar () {
             </BasicButton>
           </div>
         </div>
-        <CalendarBody date={date} />
+        <CalendarBody date={date} displayDate={displayDate} selectDate={selectDate} />
       </div>
     </div>
   )

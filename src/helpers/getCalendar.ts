@@ -16,7 +16,7 @@ import { DAYS_NUM_IN_ONE_ROW, DAY_MS } from '@/helpers/const';
 import type { DateBtn } from '@/types';
 
 
-const getCalendar = (date: Date): DateBtn[][] => {
+const getCalendar = (date: Date): DateBtn[] => {
   const { y, m } = get(date);
   const firstDayOfMonth = getFirstDayOfMonth(date);
   const lastDayOfMonth = getLastDayOfMonth(date);
@@ -83,8 +83,7 @@ const getCalendar = (date: Date): DateBtn[][] => {
       isThisMonth: false,
     })
   }
-  return splitGroup(result, DAYS_NUM_IN_ONE_ROW);
-
+  return result;
 }
 
 export default getCalendar
