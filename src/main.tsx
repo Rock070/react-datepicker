@@ -5,7 +5,6 @@ import './index.css'
 import 'virtual:uno.css'
 import '@unocss/reset/tailwind.css'
 
-
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <App />
