@@ -1,13 +1,13 @@
-import type { TimeItem } from '@/types';
+import type { TimeItem } from '@/types'
 
 const minus = (date: Date, addItem?: TimeItem) => {
-  if (!addItem) return date
-  const baseYears = date.getFullYear();
-  const baseMonths = date.getMonth();
-  const baseDays = date.getDate();
-  const baseHours = date.getHours();
-  const baseMinutes = date.getMinutes();
-  const baseSeconds = date.getSeconds();
+  if (addItem == null) return date
+  const baseYears = date.getFullYear()
+  const baseMonths = date.getMonth()
+  const baseDays = date.getDate()
+  const baseHours = date.getHours()
+  const baseMinutes = date.getMinutes()
+  const baseSeconds = date.getSeconds()
 
   const {
     years = 0,
@@ -16,8 +16,8 @@ const minus = (date: Date, addItem?: TimeItem) => {
     days = 0,
     hours = 0,
     minutes = 0,
-    seconds = 0,
-  } = addItem;
+    seconds = 0
+  } = addItem
 
   return new Date(
     baseYears - years,

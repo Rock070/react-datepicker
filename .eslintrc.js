@@ -23,6 +23,7 @@ module.exports = {
     }],
     'no-unused-vars': 'warn',
     '@typescript-eslint/no-unused-vars': 'off',
-    '@typescript-eslint/explicit-function-return-type': 'off'
+    '@typescript-eslint/explicit-function-return-type': 'off',
+    '@typescript-eslint/triple-slash-reference': 'off'
   }
 }

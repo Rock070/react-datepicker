@@ -11,18 +11,18 @@ const splitGroup = (arr: any[], num: number) => {
   /**
    * TODO: deep clone
    */
-  if (!arr || !arr.length) return []
+  if (arr.length === 0) return []
 
-  const clone = [...arr];
-  const result = [];
+  const clone = [...arr]
+  const result = []
 
   const divideTime = Math.ceil(clone.length / num)
 
-  for (let i = 0; i < divideTime; i ++) {
+  for (let i = 0; i < divideTime; i++) {
     result.push(clone.slice(i * num, i * num + num))
   }
 
-  return result;
+  return result
 }
 
 export default splitGroup
