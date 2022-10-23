@@ -38,6 +38,8 @@
     "vite": "^3.1.0"
   },
   "lint-staged": {
-    "*.{js,ts,tsx}": "pnpm lint:js"
+    "*.{js,ts,tsx}": [
+      "eslint"
+    ]
   }
 }
