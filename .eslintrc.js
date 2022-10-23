@@ -10,6 +10,7 @@ module.exports = {
   overrides: [
   ],
   parserOptions: {
+    project: ['./tsconfig.json'],
     ecmaVersion: 'latest',
     sourceType: 'module'
   },
@@ -17,6 +18,11 @@ module.exports = {
     'react'
   ],
   rules: {
-    semi: ['error', 'never']
+    'no-console': ['warn', {
+      allow: ['warn', 'error', 'debug', 'assert']
+    }],
+    'no-unused-vars': 'warn',
+    '@typescript-eslint/no-unused-vars': 'off',
+    '@typescript-eslint/explicit-function-return-type': 'off'
   }
 }
