@@ -1,6 +1,7 @@
-import React, { useState, useMemo } from 'react'
+import React, { useMemo } from 'react'
 import { Icon } from '@iconify/react'
-import { CALENDER_HEADER, DAYS_NUM_IN_ONE_ROW, MONTH_NAMES } from '@/helpers/const'
+import cx from 'classNames'
+import { MONTH_NAMES } from '@/helpers/const'
 
 import add from '@/utils/time/add'
 import minus from '@/utils/time/minus'
@@ -22,7 +23,7 @@ interface MolMonthHeaderProps {
   changeViewMode: (mode: ViewMode) => void
 }
 
-export function MolMonthHeader (props: MolMonthHeaderProps) {
+export const MolMonthHeader: React.FC<MolMonthHeaderProps> = (props: MolMonthHeaderProps) => {
   const { displayDate, setDisplayDate, changeViewMode } = props
 
   const nowYear = useMemo(() => {
@@ -85,7 +86,7 @@ const isSameYearMonth = (date1: Date, date2: Date) => {
   return isSameYear(date1, date2) && isSameMonth(date1, date2)
 }
 
-export function MolMonthBody (props: MolMonthBodyProps) {
+export const MolMonthBody: React.FC<MolMonthBodyProps> = (props: MolMonthBodyProps) => {
   const { date, displayDate, setDisplayDate, changeViewMode } = props
 
   const { y } = get(displayDate)
@@ -96,7 +97,7 @@ export function MolMonthBody (props: MolMonthBodyProps) {
   }
 
   return (
-    <table>
+    <table width="100%">
       <tbody>
           { monthGroup.map((group, index) => (
             <tr key={index}>
@@ -105,10 +106,10 @@ export function MolMonthBody (props: MolMonthBodyProps) {
                   <td key={id}>
                     <BasicButton
                       onClick={() => setDisplayMonth(item.value)}
-                      className={`
-                        w-full px-3 py-3 text-center
-                        ${isSameYearMonth(date, new Date(y, item.value)) ? 'bg-blue hover:bg-blue' : ''}
-                      `}
+                      className={cx(
+                        'w-full py-3 text-center',
+                        { 'bg-blue hover:bg-blue': isSameYearMonth(date, new Date(y, item.value)) }
+                      )}
                     >
                       { item.text }
                     </BasicButton>
@@ -123,22 +124,36 @@ export function MolMonthBody (props: MolMonthBodyProps) {
   )
 }
 
-export default function MolMonth (props: MolMonthBodyProps & MolMonthHeaderProps) {
+const MolMonth: React.FC<MolMonthBodyProps> = (props: MolMonthBodyProps & MolMonthHeaderProps) => {
   const { date, displayDate, setDisplayDate, changeViewMode } = props
 
   return (
-    <>
-      <MolMonthHeader
-        displayDate={displayDate}
-        setDisplayDate={setDisplayDate}
-        changeViewMode={changeViewMode}
-      />
-      <MolMonthBody
-        date={date}
-        displayDate={displayDate}
-        setDisplayDate={setDisplayDate}
-        changeViewMode={changeViewMode}
-      />
-    </>
+    <table>
+      <thead>
+        <tr>
+          <th>
+            <MolMonthHeader
+              displayDate={displayDate}
+              setDisplayDate={setDisplayDate}
+              changeViewMode={changeViewMode}
+            />
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <MolMonthBody
+              date={date}
+              displayDate={displayDate}
+              setDisplayDate={setDisplayDate}
+              changeViewMode={changeViewMode}
+            />
+        </td>
+      </tr>
+      </tbody>
+    </table>
   )
 }
+
+export default MolMonth
