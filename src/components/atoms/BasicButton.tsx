@@ -1,31 +1,37 @@
 import React from 'react'
+import cx from 'classNames'
 
 interface Props {
   type?: 'button' | 'submit' | 'reset'
   className?: string
+  disabled?: boolean
   onClick?: () => void
   children?: any
 }
 
-export default function BasicButton ({
+const BasicButton: React.FC<Props> = ({
   type = 'button',
   onClick = () => {},
   className = '',
-  children = ''
-}: Props) {
+  disabled = false,
+  children
+}) => {
   return (
     <button
       type={type}
       onClick={onClick}
-      className={
-      `
-        py-1 px-2
-        rounded-sm
-        hover:bg-gray-3
-        ${className}
-      `}
+      className={cx(
+        'py-1 px-2 rounded-sm',
+        className,
+        {
+          'cursor-not-allowed pointer-events-none bg-gray-3': disabled,
+          'hover:bg-gray-3': !disabled
+        }
+      )}
     >
       {children}
     </button>
   )
 }
+
+export default BasicButton
