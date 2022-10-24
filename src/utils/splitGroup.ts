@@ -7,7 +7,7 @@
  * @param arr
  * @param num
  */
-const splitGroup = (arr: any[], num: number) => {
+const splitGroup = <T>(arr: T[], num: number): T[][] => {
   /**
    * TODO: deep clone
    */
