@@ -39,7 +39,7 @@ export function MolCalendarBody (props: MolCalendarBodyProps) {
   const calendarDisplay = pipeLine(calendar) as DateBtn[][]
 
   return (
-    <table>
+    <table width="100%" cellPadding="0">
       <thead>
         <tr>
           { CALENDER_HEADER.map(item => <th key={item} className="p-1 m-1" >{ item }</th>) }
@@ -115,13 +115,29 @@ export default function MolCalendar (props: MolCalendarBodyProps & MolCalendarHe
   const { date, displayDate, selectDate, setDisplayDate, changeViewMode } = props
 
   return (
-    <>
-      <MolCalendarHeader
-        displayDate={displayDate}
-        setDisplayDate={setDisplayDate}
-        changeViewMode={changeViewMode}
-      />
-      <MolCalendarBody date={date} displayDate={displayDate} selectDate={selectDate} />
-    </>
+    <table width="100%" cellPadding="0">
+      <thead>
+        <tr>
+          <th>
+          <MolCalendarHeader
+            displayDate={displayDate}
+            setDisplayDate={setDisplayDate}
+            changeViewMode={changeViewMode}
+          />
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <MolCalendarBody
+              date={date}
+              displayDate={displayDate}
+              selectDate={selectDate}
+            />
+          </td>
+        </tr>
+      </tbody>
+    </table>
   )
 }

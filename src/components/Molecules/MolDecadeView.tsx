@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import cx from 'classNames'
+import cx from 'classnames'
 import { Icon } from '@iconify/react'
 
 import add from '@/utils/time/add'
@@ -75,7 +75,7 @@ export const MolDecadeBody: React.FC<MolDecadeBodyProps> = (props) => {
   }
 
   return (
-    <table width="100%">
+    <table width="100%" cellPadding="0">
       <tbody>
           { yearGroup.map((group, index) => (
             <tr key={index}>
@@ -108,7 +108,7 @@ const MolDecade: React.FC<MolDecadeBodyProps & MolDecadeHeaderProps> = (props) =
   const { date, displayDate, setDisplayDate, changeViewMode } = props
 
   return (
-    <table>
+    <table width="100%" cellPadding="0">
       <thead>
         <tr>
           <th>

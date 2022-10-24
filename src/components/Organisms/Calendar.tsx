@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-
+import cx from 'classnames'
 import MolCalendar from '@/components/Molecules/MolCalendarView'
 import MolMonth from '@/components/Molecules/MolMonthView'
 import MolYear from '@/components/Molecules/MolYearView'
@@ -10,10 +10,11 @@ import { ViewMode } from '@/types'
 export interface CalendarProps {
   date: Date
   selectDate: (date: Date) => void
+  width?: number
 }
 
 const Calendar: React.FC<CalendarProps> = (props) => {
-  const { date, selectDate } = props
+  const { date, selectDate, width = 350 } = props
   const [displayDate, setDisplayDate] = useState(date)
   const [viewMode, changeViewMode] = useState<ViewMode>(ViewMode.Calendar)
 
@@ -32,7 +33,7 @@ const Calendar: React.FC<CalendarProps> = (props) => {
   }())
 
   return (
-    <div>
+    <div className="space-y-6">
       <div className="flex flex-col items-center">
         <div>
           displayDate: { displayDate.toLocaleDateString() }
@@ -41,25 +42,23 @@ const Calendar: React.FC<CalendarProps> = (props) => {
           viewMode: { viewMode }
         </div>
       </div>
-      <DisplayView
-        displayDate={displayDate}
-        setDisplayDate={setDisplayDate}
-        changeViewMode={changeViewMode}
-        date={date}
-        selectDate={selectDate}
-      />
+      <div
+        style={{ width: `${width}px` }}
+        className='
+          text-sm bg-blend-soft-light
+          shadow-sm shadow-gray
+        '
+      >
+        <DisplayView
+          displayDate={displayDate}
+          setDisplayDate={setDisplayDate}
+          changeViewMode={changeViewMode}
+          date={date}
+          selectDate={selectDate}
+        />
+      </div>
     </div>
   )
 }
 
-/**
- * -
- * - 考慮時區問題
- * - mode: 單選、多選(跨月份怎麼辦)、range
- * - view 模式:
- *    日曆、年、十年、百年
- * - 禁止 1970 以前
- * - disabled 日期
- * - 滾輪事件去切換日曆 (https://vuetifyjs.com/en/components/date-pickers/#colors)
- */
 export default Calendar

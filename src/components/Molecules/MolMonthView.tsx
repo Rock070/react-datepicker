@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import { Icon } from '@iconify/react'
-import cx from 'classNames'
+import cx from 'classnames'
 import { MONTH_NAMES } from '@/helpers/const'
 
 import add from '@/utils/time/add'
@@ -97,7 +97,7 @@ export const MolMonthBody: React.FC<MolMonthBodyProps> = (props: MolMonthBodyPro
   }
 
   return (
-    <table width="100%">
+    <table width="100%" cellPadding="0">
       <tbody>
           { monthGroup.map((group, index) => (
             <tr key={index}>
@@ -128,7 +128,7 @@ const MolMonth: React.FC<MolMonthBodyProps> = (props: MolMonthBodyProps & MolMon
   const { date, displayDate, setDisplayDate, changeViewMode } = props
 
   return (
-    <table>
+    <table width="100%" cellPadding="0">
       <thead>
         <tr>
           <th>
