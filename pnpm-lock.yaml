@@ -8,6 +8,7 @@ specifiers:
   '@typescript-eslint/parser': ^5.40.1
   '@unocss/reset': ^0.45.30
   '@vitejs/plugin-react': ^2.1.0
+  classnames: ^2.3.2
   eslint: ^8.0.1
   eslint-config-standard: ^17.0.0
   eslint-config-standard-with-typescript: ^23.0.0
@@ -25,6 +26,7 @@ specifiers:
 
 dependencies:
   '@unocss/reset': 0.45.30
+  classnames: 2.3.2
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
 
@@ -1047,6 +1049,10 @@ packages:
     optionalDependencies:
       fsevents: 2.3.2
     dev: true
+
+  /classnames/2.3.2:
+    resolution: {integrity: sha512-CSbhY4cFEJRe6/GQzIk5qXZ4Jeg5pcsP7b5peFSDpffpe1cqjASH/n9UTjBwOp6XpMSTwQ8Za2K5V02ueA7Tmw==}
+    dev: false
 
   /clean-stack/2.2.0:
     resolution: {integrity: sha512-4diC9HaTE+KRAMWhDhrGOECgWZxoevMc5TlkObMqNSsVU62PYzXZ/SMTjzyGAFF1YusgxGcSWTEXBhp0CPwQ1A==}
