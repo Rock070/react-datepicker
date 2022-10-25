@@ -6,7 +6,6 @@ interface Props {
   className?: string
   disabled?: boolean
   onClick?: () => void
-  children?: any
 }
 
 const BasicButton: React.FC<Props> = ({
