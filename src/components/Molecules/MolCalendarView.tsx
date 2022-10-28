@@ -21,16 +21,20 @@ interface MolCalendarBodyProps {
   date: Date
   displayDate: Date
   selectDate: (date: Date) => void
+  setDisplayDate: (date: Date) => void
 }
 
 export function MolCalendarBody (props: MolCalendarBodyProps) {
-  const { date, displayDate, selectDate } = props
+  const { date, displayDate, setDisplayDate, selectDate } = props
 
   const calendar = getCalendar(displayDate)
   const Step1Func = (calendar: DateBtn[]) => calendar.map(item => (
     {
       ...item,
-      clickFn: () => selectDate(item.date)
+      clickFn: () => {
+        setDisplayDate(item.date)
+        selectDate(item.date)
+      }
     }
   ))
   const step2Func = (calendar: DateBtn[]) => splitGroup(calendar, DAYS_NUM_IN_ONE_ROW)
@@ -56,7 +60,7 @@ export function MolCalendarBody (props: MolCalendarBodyProps) {
                     className={
                       `
                         p-1
-                        text-center hover:bg-gray-3 rounded-1 cursor-pointer select-none
+                        text-center hover:bg-gray-2 rounded-1 cursor-pointer select-none
                         ${!item.isThisMonth ? 'text-gray' : ''}
                         ${isSameTimestamp(item.date, date) ? 'bg-blue' : ''}
                       `
@@ -134,6 +138,7 @@ export default function MolCalendar (props: MolCalendarBodyProps & MolCalendarHe
               date={date}
               displayDate={displayDate}
               selectDate={selectDate}
+              setDisplayDate={setDisplayDate}
             />
           </td>
         </tr>
