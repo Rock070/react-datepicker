@@ -1,7 +1,7 @@
 import type { TimeItem } from '@/types'
 
-const minus = (date: Date, addItem?: TimeItem) => {
-  if (addItem == null) return date
+const minus = (date: Date, minusItem?: TimeItem) => {
+  if (minusItem == null) return date
   const baseYears = date.getFullYear()
   const baseMonths = date.getMonth()
   const baseDays = date.getDate()
@@ -17,7 +17,7 @@ const minus = (date: Date, addItem?: TimeItem) => {
     hours = 0,
     minutes = 0,
     seconds = 0
-  } = addItem
+  } = minusItem
 
   return new Date(
     baseYears - years,
