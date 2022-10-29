@@ -1,22 +1,25 @@
 import React, { useState } from 'react'
+import { CalendarContext } from '@/hooks/useCalendarContext'
+
 import cx from 'classnames'
 import MolCalendar from '@/components/Molecules/MolCalendarView'
 import MolMonth from '@/components/Molecules/MolMonthView'
 import MolYear from '@/components/Molecules/MolYearView'
 import MolDecade from '@/components/Molecules/MolDecadeView'
 
-import { ViewMode } from '@/types'
+import { ViewMode, Mode } from '@/types'
 
 export interface CalendarProps {
   date: Date
-  selectDate: (date: Date) => void
+  setDate: (date: Date) => void
   width?: number
 }
 
 const Calendar: React.FC<CalendarProps> = (props) => {
-  const { date, selectDate, width = 350 } = props
+  const { date, setDate, width = 350 } = props
   const [displayDate, setDisplayDate] = useState(date)
   const [viewMode, changeViewMode] = useState<ViewMode>(ViewMode.Calendar)
+  const [mode, changeMode] = useState<Mode>(Mode.DatePicker)
 
   const DisplayView = (function () {
     switch (viewMode) {
@@ -33,6 +36,13 @@ const Calendar: React.FC<CalendarProps> = (props) => {
   }())
 
   return (
+    <CalendarContext.Provider value={{
+      displayDate,
+      setDisplayDate,
+      changeViewMode,
+      date,
+      setDate
+    }}>
     <div className="space-y-6">
       <div className="flex flex-col items-center">
         <div>
@@ -49,15 +59,10 @@ const Calendar: React.FC<CalendarProps> = (props) => {
           shadow-sm shadow-gray
         '
       >
-        <DisplayView
-          displayDate={displayDate}
-          setDisplayDate={setDisplayDate}
-          changeViewMode={changeViewMode}
-          date={date}
-          selectDate={selectDate}
-        />
+        <DisplayView />
       </div>
     </div>
+    </CalendarContext.Provider>
   )
 }
 

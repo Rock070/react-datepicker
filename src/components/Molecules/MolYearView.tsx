@@ -1,4 +1,6 @@
 import React, { useMemo } from 'react'
+import { useCalendarContext } from '@/hooks/useCalendarContext'
+
 import cx from 'classnames'
 import { Icon } from '@iconify/react'
 
@@ -14,14 +16,10 @@ import BasicButton from '@/components/Atoms/BasicButton'
 
 import { ViewMode } from '@/types'
 
-interface MolYearHeaderProps {
-  displayDate: Date
-  setDisplayDate: (date: Date) => void
-  changeViewMode: (mode: ViewMode) => void
-}
-
-export const MolYearHeader: React.FC<MolYearHeaderProps> = (props) => {
-  const { displayDate, setDisplayDate, changeViewMode } = props
+export const MolYearHeader: React.FC = () => {
+  const ctx = useCalendarContext()
+  if (!ctx) return <></>
+  const { displayDate, setDisplayDate, changeViewMode } = ctx
 
   const nowDecadeDisplay = useMemo(() => {
     const y = getDecade(displayDate)
@@ -52,15 +50,10 @@ export const MolYearHeader: React.FC<MolYearHeaderProps> = (props) => {
   )
 }
 
-interface MolYearBodyProps {
-  date: Date
-  displayDate: Date
-  setDisplayDate: (date: Date) => void
-  changeViewMode: (mode: ViewMode) => void
-}
-
-export const MolYearBody: React.FC<MolYearBodyProps> = (props) => {
-  const { date, displayDate, setDisplayDate, changeViewMode } = props
+export const MolYearBody: React.FC = () => {
+  const ctx = useCalendarContext()
+  if (!ctx) return <></>
+  const { date, displayDate, setDisplayDate, changeViewMode } = ctx
   const year = getDecade(displayDate)
   const years = Array.from({ length: 10 }, (_, index) => year + index + 1)
 
@@ -102,31 +95,20 @@ export const MolYearBody: React.FC<MolYearBodyProps> = (props) => {
   )
 }
 
-const MolYear: React.FC<MolYearBodyProps & MolYearHeaderProps> = (props) => {
-  const { date, displayDate, setDisplayDate, changeViewMode } = props
-
+const MolYear: React.FC = () => {
   return (
     <table width="100%" cellPadding="0">
       <thead>
         <tr>
           <th>
-            <MolYearHeader
-              displayDate={displayDate}
-              setDisplayDate={setDisplayDate}
-              changeViewMode={changeViewMode}
-            />
+            <MolYearHeader />
           </th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td>
-            <MolYearBody
-              date={date}
-              displayDate={displayDate}
-              setDisplayDate={setDisplayDate}
-              changeViewMode={changeViewMode}
-            />
+            <MolYearBody />
           </td>
         </tr>
       </tbody>

@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react'
+import { useCalendarContext } from '@/hooks/useCalendarContext'
 import { Icon } from '@iconify/react'
 import cx from 'classnames'
 import { MONTH_NAMES } from '@/helpers/const'
@@ -17,14 +18,10 @@ import BasicButton from '@/components/Atoms/BasicButton'
 
 import { ViewMode } from '@/types'
 
-interface MolMonthHeaderProps {
-  displayDate: Date
-  setDisplayDate: (date: Date) => void
-  changeViewMode: (mode: ViewMode) => void
-}
-
-export const MolMonthHeader: React.FC<MolMonthHeaderProps> = (props: MolMonthHeaderProps) => {
-  const { displayDate, setDisplayDate, changeViewMode } = props
+export const MolMonthHeader: React.FC = () => {
+  const ctx = useCalendarContext()
+  if (!ctx) return <></>
+  const { displayDate, setDisplayDate, changeViewMode } = ctx
 
   const nowYear = useMemo(() => {
     const { y } = get(displayDate)
@@ -54,14 +51,6 @@ export const MolMonthHeader: React.FC<MolMonthHeaderProps> = (props: MolMonthHea
   </div>
   )
 }
-
-interface MolMonthBodyProps {
-  date: Date
-  displayDate: Date
-  setDisplayDate: (date: Date) => void
-  changeViewMode: (mode: ViewMode) => void
-}
-
 interface TransformMonth {
   value: number
   text: string
@@ -86,8 +75,10 @@ const isSameYearMonth = (date1: Date, date2: Date) => {
   return isSameYear(date1, date2) && isSameMonth(date1, date2)
 }
 
-export const MolMonthBody: React.FC<MolMonthBodyProps> = (props: MolMonthBodyProps) => {
-  const { date, displayDate, setDisplayDate, changeViewMode } = props
+export const MolMonthBody: React.FC = () => {
+  const ctx = useCalendarContext()
+  if (!ctx) return <></>
+  const { date, displayDate, setDisplayDate, changeViewMode } = ctx
 
   const { y } = get(displayDate)
   const setDisplayMonth = (monthVal: number) => {
@@ -124,31 +115,24 @@ export const MolMonthBody: React.FC<MolMonthBodyProps> = (props: MolMonthBodyPro
   )
 }
 
-const MolMonth: React.FC<MolMonthBodyProps> = (props: MolMonthBodyProps & MolMonthHeaderProps) => {
-  const { date, displayDate, setDisplayDate, changeViewMode } = props
+const MolMonth: React.FC = () => {
+  const ctx = useCalendarContext()
+  if (!ctx) return <></>
+  const { date, displayDate, setDisplayDate, changeViewMode } = ctx
 
   return (
     <table width="100%" cellPadding="0">
       <thead>
         <tr>
           <th>
-            <MolMonthHeader
-              displayDate={displayDate}
-              setDisplayDate={setDisplayDate}
-              changeViewMode={changeViewMode}
-            />
+            <MolMonthHeader/>
           </th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td>
-            <MolMonthBody
-              date={date}
-              displayDate={displayDate}
-              setDisplayDate={setDisplayDate}
-              changeViewMode={changeViewMode}
-            />
+            <MolMonthBody />
         </td>
       </tr>
       </tbody>
