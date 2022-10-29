@@ -25,7 +25,7 @@ const BasicButton: React.FC<Props> = ({
         className,
         {
           'cursor-not-allowed pointer-events-none bg-gray-3': disabled,
-          'hover:bg-gray-3': !disabled
+          'hover:bg-gray-2': !disabled
         }
       )}
     >

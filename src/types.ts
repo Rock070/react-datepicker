@@ -33,3 +33,11 @@ export const enum ViewMode {
   Year = 1 << 2,
   Decade = 1 << 3,
 }
+
+export const enum WheelDirection {
+  NONE,
+  TOP,
+  BOTTOM,
+  LEFT,
+  RIGHT,
+}
