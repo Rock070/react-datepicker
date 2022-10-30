@@ -1,5 +1,5 @@
 name: CI
-run-name: ${{ github.actor }} is running GitHub Actions 🚀
+run-name: ${ github.job } commit ${{ github.sha }} is running GitHub Actions 🚀
 
 
 on:
@@ -13,7 +13,7 @@ on:
 
 
 jobs:
-  lint:
+  Lint:
     runs-on: ubuntu-latest
     steps:
       - name: Check out to my repo
@@ -38,6 +38,51 @@ jobs:
 
       - name: Type Checking
         run: pnpm tsc
+
+      - name: Build
+        run: pnpm vite build
+  Type_Check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out to my repo
+        uses: actions/checkout@v3
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 7.2.1
+
+      - name: Set node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.16
+          cache: pnpm
+
+      - name: Setup
+        run: pnpm install
+
+      - name: Type Checking
+        run: pnpm tsc
+
+  Build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out to my repo
+        uses: actions/checkout@v3
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 7.2.1
+
+      - name: Set node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.16
+          cache: pnpm
+
+      - name: Setup
+        run: pnpm install
 
       - name: Build
         run: pnpm vite build
