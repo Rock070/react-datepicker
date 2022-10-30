@@ -38,4 +38,4 @@ jobs:
         run: pnpm tsc
 
       - name: Build
-        - run: pnpm vite build
+        run: pnpm vite build
