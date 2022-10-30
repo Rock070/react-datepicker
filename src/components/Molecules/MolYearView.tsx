@@ -13,6 +13,7 @@ import splitGroup from '@/utils/splitGroup'
 import setCalculatedTime from '@/helpers/setCalculatedTime'
 
 import BasicButton from '@/components/Atoms/BasicButton'
+import BasicTable from '@/components/Atoms/BasicTable'
 
 import { ViewMode } from '@/types'
 
@@ -66,53 +67,59 @@ export const MolYearBody: React.FC = () => {
   }
 
   return (
-    <table width="100%" cellPadding="0">
-      <tbody>
-          { yearGroup.map((group, index) => (
-            <tr key={index}>
-              {
-                group.map((item, id) => (
-                  <td key={id}>
-                    <BasicButton
-                      onClick={() => setDisplayYear(item)}
-                      className={cx(
-                        'w-full px-3 py-3 text-center',
-                        {
-                          'bg-blue hover:bg-blue': isSameYear(date, new Date(item, 1))
-                        }
-                      )}
-                    >
-                      { item }
-                    </BasicButton>
-                  </td>
-                ))
-              }
-            </tr>
-          ))
-          }
-      </tbody>
-    </table>
+    <BasicTable>
+      {{
+        body:
+          <>
+            {
+              yearGroup.map((group, index) => (
+                <tr key={index}>
+                  {
+                    group.map((item, id) => (
+                      <td key={id}>
+                        <BasicButton
+                          onClick={() => setDisplayYear(item)}
+                          className={cx(
+                            'w-full px-3 py-3 text-center',
+                            {
+                              'bg-blue hover:bg-blue': isSameYear(date, new Date(item, 1))
+                            }
+                          )}
+                        >
+                          { item }
+                        </BasicButton>
+                      </td>
+                    ))
+                  }
+                </tr>
+              ))
+            }
+          </>
+      }}
+    </BasicTable>
   )
 }
 
 const MolYear: React.FC = () => {
   return (
-    <table width="100%" cellPadding="0">
-      <thead>
-        <tr>
-          <th>
-            <MolYearHeader />
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <MolYearBody />
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <BasicTable>
+      {{
+        header: (
+          <tr>
+            <th>
+              <MolYearHeader />
+            </th>
+          </tr>
+        ),
+        body: (
+          <tr>
+            <td>
+              <MolYearBody />
+            </td>
+          </tr>
+        )
+      }}
+    </BasicTable>
   )
 }
 

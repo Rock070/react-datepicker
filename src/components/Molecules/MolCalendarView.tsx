@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useMemo } from 'react'
+import React, { useRef, useMemo } from 'react'
 import { useCalendarContext } from '@/hooks/useCalendarContext'
 import { Icon } from '@iconify/react'
 import { CALENDER_HEADER, MONTH_NAMES, DAYS_NUM_IN_ONE_ROW } from '@/helpers/const'
@@ -10,30 +10,20 @@ import minus from '@/utils/time/minus'
 import isSameTimestamp from '@/utils/time/isSameTimestamp'
 import { get } from '@/utils/time/get'
 import splitGroup from '@/utils/splitGroup'
-import throttle from '@/utils/throttle'
-import pipe from '@/utils/pipe'
 
 import getCalendar from '@/helpers/getCalendar'
-import getWheelXDirection from '@/helpers/getWheelXDirection'
 import setCalculatedTime from '@/helpers/setCalculatedTime'
 
 import BasicButton from '@/components/Atoms/BasicButton'
-import { ViewMode, WheelDirection } from '@/types'
+import BasicTable from '@/components/Atoms/BasicTable'
+import { ViewMode } from '@/types'
 
 import type { DateBtn } from '@/types'
-
-// interface MolCalendarBodyProps {
-//   date: Date
-//   displayDate: Date
-//   setDisplayDate: (date: Date) => void
-//   setDate: (date: Date) => void
-// }
 
 export const MolCalendarBody: React.FC = () => {
   const ctx = useCalendarContext()
   if (!ctx) return <></>
   const { date, displayDate, setDisplayDate, setDate } = ctx
-  console.log(date)
 
   const calendar = getCalendar(displayDate)
 
@@ -85,39 +75,38 @@ export const MolCalendarBody: React.FC = () => {
   // }, [])
 
   return (
-    <table ref={tableRef} width="100%" cellPadding="0">
-      <thead>
-        <tr>
-          { CALENDER_HEADER.map(item => <th key={item} className="p-1 m-1" >{ item }</th>) }
-        </tr>
-      </thead>
-      <tbody>
-        { calendarDisplay.map((group, index) =>
-            <tr key={index} >
-              {
-                group.map(item =>
-                  <td
-                    key={ item.timestamp }
-                    onClick={item.clickFn}
-                    onMouseEnter={item.mouseFn}
-                    className={cx(
-                      'p1 text-center rounded-1 cursor-pointer select-none',
-                      {
-                        'text-gray': !item.isThisMonth,
-                        'bg-blue': item.isSelected,
+    <BasicTable >
+      {{
+        header: <tr>{ CALENDER_HEADER.map(item => <th key={item} className="p-1 m-1" >{ item }</th>) }</tr>,
+        body: <>
+          { calendarDisplay.map((group, index) =>
+           <tr key={index} >
+             {
+               group.map(item =>
+                 <td
+                   key={ item.timestamp }
+                   onClick={item.clickFn}
+                   onMouseEnter={item.mouseFn}
+                   className={cx(
+                     'p1 text-center rounded-1 cursor-pointer select-none',
+                     {
+                       'text-gray': !item.isThisMonth,
+                       'bg-blue': item.isSelected,
 
-                        'hover:bg-gray-2': !item.isSelected
-                      }
-                    )}
-                  >
-                    { item.time.d }
-                  </td>
-                )
-              }
-            </tr>
-        )}
-      </tbody>
-    </table>
+                       'hover:bg-gray-2': !item.isSelected
+                     }
+                   )}
+                 >
+                   { item.time.d }
+                 </td>
+               )
+             }
+           </tr>
+          )}
+
+        </>
+      }}
+  </BasicTable>
   )
 }
 
@@ -157,21 +146,23 @@ export const MolCalendarHeader: React.FC = () => {
 
 export default function MolCalendar () {
   return (
-    <table width="100%" cellPadding="0">
-      <thead>
-        <tr>
-          <th>
-          <MolCalendarHeader />
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <MolCalendarBody />
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <BasicTable>
+      {{
+        header: (
+          <tr>
+            <th>
+              <MolCalendarHeader />
+            </th>
+          </tr>
+        ),
+        body: (
+          <tr>
+            <td>
+              <MolCalendarBody />
+            </td>
+          </tr>
+        )
+      }}
+    </BasicTable>
   )
 }

@@ -15,6 +15,7 @@ import pipe from '@/utils/pipe'
 import setCalculatedTime from '@/helpers/setCalculatedTime'
 
 import BasicButton from '@/components/Atoms/BasicButton'
+import BasicTable from '@/components/Atoms/BasicTable'
 
 import { ViewMode } from '@/types'
 
@@ -88,55 +89,58 @@ export const MolMonthBody: React.FC = () => {
   }
 
   return (
-    <table width="100%" cellPadding="0">
-      <tbody>
-          { monthGroup.map((group, index) => (
-            <tr key={index}>
-              {
-                group.map((item, id) => (
-                  <td key={id}>
-                    <BasicButton
-                      onClick={() => setDisplayMonth(item.value)}
-                      className={cx(
-                        'w-full py-3 text-center',
-                        { 'bg-blue hover:bg-blue': isSameYearMonth(date, new Date(y, item.value)) }
-                      )}
-                    >
-                      { item.text }
-                    </BasicButton>
-                  </td>
-                ))
-              }
-            </tr>
-          ))
+    <BasicTable>
+    {{
+      body: (
+        <>
+          {
+            monthGroup.map((group, index) => (
+              <tr key={index}>
+                {
+                  group.map((item, id) => (
+                    <td key={id}>
+                      <BasicButton
+                        onClick={() => setDisplayMonth(item.value)}
+                        className={cx(
+                          'w-full py-3 text-center',
+                          { 'bg-blue hover:bg-blue': isSameYearMonth(date, new Date(y, item.value)) }
+                        )}
+                      >
+                        { item.text }
+                      </BasicButton>
+                    </td>
+                  ))
+                }
+              </tr>
+            ))
           }
-      </tbody>
-    </table>
+        </>
+      )
+    }}
+    </BasicTable>
   )
 }
 
 const MolMonth: React.FC = () => {
-  const ctx = useCalendarContext()
-  if (!ctx) return <></>
-  const { date, displayDate, setDisplayDate, changeViewMode } = ctx
-
   return (
-    <table width="100%" cellPadding="0">
-      <thead>
+    <BasicTable>
+    {{
+      header: (
         <tr>
           <th>
             <MolMonthHeader/>
           </th>
         </tr>
-      </thead>
-      <tbody>
+      ),
+      body: (
         <tr>
           <td>
             <MolMonthBody />
         </td>
       </tr>
-      </tbody>
-    </table>
+      )
+    }}
+    </BasicTable>
   )
 }
 

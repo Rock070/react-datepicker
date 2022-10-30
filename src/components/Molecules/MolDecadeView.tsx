@@ -14,6 +14,7 @@ import splitGroup from '@/utils/splitGroup'
 import setCalculatedTime from '@/helpers/setCalculatedTime'
 
 import BasicButton from '@/components/Atoms/BasicButton'
+import BasicTable from '@/components/Atoms/BasicTable'
 
 import { ViewMode } from '@/types'
 
@@ -69,8 +70,10 @@ export const MolDecadeBody: React.FC = () => {
   }
 
   return (
-    <table width="100%" cellPadding="0">
-      <tbody>
+    <BasicTable>
+    {{
+      body:
+        <>
           { yearGroup.map((group, index) => (
             <tr key={index}>
               {
@@ -91,31 +94,31 @@ export const MolDecadeBody: React.FC = () => {
                 ))
               }
             </tr>
-          ))
-          }
-      </tbody>
-    </table>
+          ))}
+        </>
+    }}
+  </BasicTable>
   )
 }
 
 const MolDecade: React.FC = () => {
   return (
-    <table width="100%" cellPadding="0">
-      <thead>
-        <tr>
-          <th>
-            <MolDecadeHeader />
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <MolDecadeBody />
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <BasicTable>
+      {{
+        header:
+          <tr>
+            <th>
+              <MolDecadeHeader />
+            </th>
+          </tr>,
+        body:
+          <tr>
+            <td>
+              <MolDecadeBody />
+            </td>
+          </tr>
+      }}
+  </BasicTable>
   )
 }
 

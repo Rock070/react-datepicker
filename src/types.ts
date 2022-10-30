@@ -3,10 +3,13 @@ export interface DateBtn {
   date: Date
   time: Time
   clickFn: () => void
-  disabled: boolean
-  selected: boolean
+  mouseFn?: () => void
+  isSelected?: boolean
 
+  disabled?: boolean
   isThisMonth: boolean
+
+  isHover?: boolean
 }
 
 export interface Time {
@@ -25,6 +28,11 @@ export interface TimeItem {
   hours?: number
   minutes?: number
   seconds?: number
+}
+
+export const enum Mode {
+  DatePicker = 1,
+  DateRange = 1 << 1,
 }
 
 export const enum ViewMode {
