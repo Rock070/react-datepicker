@@ -19,14 +19,14 @@ jobs:
       - name: Check out to my repo
         uses: actions/checkout@v3
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+
       - name: Set node
         uses: actions/setup-node@v3
         with:
           node-version: 16.16
           cache: pnpm
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2
 
       - name: Setup
         run: pnpm install
