@@ -1,5 +1,5 @@
 name: CI
-run-name: ${ github.job } commit ${{ github.sha }} is running GitHub Actions 🚀
+run-name: ${{ github.job }} commit ${{ github.sha }} is running GitHub Actions 🚀
 
 
 on:
@@ -13,6 +13,12 @@ on:
 
 
 jobs:
+  Set_Output:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Add SHORT_SHA env property with commit short sha
+        run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
+
   Lint:
     runs-on: ubuntu-latest
     steps:
