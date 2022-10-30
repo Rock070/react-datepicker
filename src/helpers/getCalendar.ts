@@ -39,7 +39,7 @@ const getCalendar = (date: Date): DateBtn[] => {
       date: targetDate,
       clickFn: () => {},
       disabled: false,
-      selected: false,
+      isSelected: false,
       isThisMonth: true
     })
   }
@@ -58,7 +58,7 @@ const getCalendar = (date: Date): DateBtn[] => {
       time: get(targetDate),
       clickFn: () => {},
       disabled: false,
-      selected: false,
+      isSelected: false,
       isThisMonth: false
     })
   }
@@ -77,7 +77,7 @@ const getCalendar = (date: Date): DateBtn[] => {
       time: get(targetDate),
       clickFn: () => {},
       disabled: false,
-      selected: false,
+      isSelected: false,
       isThisMonth: false
     })
   }

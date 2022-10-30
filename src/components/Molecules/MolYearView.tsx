@@ -1,4 +1,6 @@
 import React, { useMemo } from 'react'
+import { useCalendarContext } from '@/hooks/useCalendarContext'
+
 import cx from 'classnames'
 import { Icon } from '@iconify/react'
 
@@ -11,17 +13,14 @@ import splitGroup from '@/utils/splitGroup'
 import setCalculatedTime from '@/helpers/setCalculatedTime'
 
 import BasicButton from '@/components/Atoms/BasicButton'
+import BasicTable from '@/components/Atoms/BasicTable'
 
 import { ViewMode } from '@/types'
 
-interface MolYearHeaderProps {
-  displayDate: Date
-  setDisplayDate: (date: Date) => void
-  changeViewMode: (mode: ViewMode) => void
-}
-
-export const MolYearHeader: React.FC<MolYearHeaderProps> = (props) => {
-  const { displayDate, setDisplayDate, changeViewMode } = props
+export const MolYearHeader: React.FC = () => {
+  const ctx = useCalendarContext()
+  if (!ctx) return <></>
+  const { displayDate, setDisplayDate, changeViewMode } = ctx
 
   const nowDecadeDisplay = useMemo(() => {
     const y = getDecade(displayDate)
@@ -52,15 +51,10 @@ export const MolYearHeader: React.FC<MolYearHeaderProps> = (props) => {
   )
 }
 
-interface MolYearBodyProps {
-  date: Date
-  displayDate: Date
-  setDisplayDate: (date: Date) => void
-  changeViewMode: (mode: ViewMode) => void
-}
-
-export const MolYearBody: React.FC<MolYearBodyProps> = (props) => {
-  const { date, displayDate, setDisplayDate, changeViewMode } = props
+export const MolYearBody: React.FC = () => {
+  const ctx = useCalendarContext()
+  if (!ctx) return <></>
+  const { date, displayDate, setDisplayDate, changeViewMode } = ctx
   const year = getDecade(displayDate)
   const years = Array.from({ length: 10 }, (_, index) => year + index + 1)
 
@@ -73,64 +67,59 @@ export const MolYearBody: React.FC<MolYearBodyProps> = (props) => {
   }
 
   return (
-    <table width="100%" cellPadding="0">
-      <tbody>
-          { yearGroup.map((group, index) => (
-            <tr key={index}>
-              {
-                group.map((item, id) => (
-                  <td key={id}>
-                    <BasicButton
-                      onClick={() => setDisplayYear(item)}
-                      className={cx(
-                        'w-full px-3 py-3 text-center',
-                        {
-                          'bg-blue hover:bg-blue': isSameYear(date, new Date(item, 1))
-                        }
-                      )}
-                    >
-                      { item }
-                    </BasicButton>
-                  </td>
-                ))
-              }
-            </tr>
-          ))
-          }
-      </tbody>
-    </table>
+    <BasicTable>
+      {{
+        body:
+          <>
+            {
+              yearGroup.map((group, index) => (
+                <tr key={index}>
+                  {
+                    group.map((item, id) => (
+                      <td key={id}>
+                        <BasicButton
+                          onClick={() => setDisplayYear(item)}
+                          className={cx(
+                            'w-full px-3 py-3 text-center',
+                            {
+                              'bg-blue hover:bg-blue': isSameYear(date, new Date(item, 1))
+                            }
+                          )}
+                        >
+                          { item }
+                        </BasicButton>
+                      </td>
+                    ))
+                  }
+                </tr>
+              ))
+            }
+          </>
+      }}
+    </BasicTable>
   )
 }
 
-const MolYear: React.FC<MolYearBodyProps & MolYearHeaderProps> = (props) => {
-  const { date, displayDate, setDisplayDate, changeViewMode } = props
-
+const MolYear: React.FC = () => {
   return (
-    <table width="100%" cellPadding="0">
-      <thead>
-        <tr>
-          <th>
-            <MolYearHeader
-              displayDate={displayDate}
-              setDisplayDate={setDisplayDate}
-              changeViewMode={changeViewMode}
-            />
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <MolYearBody
-              date={date}
-              displayDate={displayDate}
-              setDisplayDate={setDisplayDate}
-              changeViewMode={changeViewMode}
-            />
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <BasicTable>
+      {{
+        header: (
+          <tr>
+            <th>
+              <MolYearHeader />
+            </th>
+          </tr>
+        ),
+        body: (
+          <tr>
+            <td>
+              <MolYearBody />
+            </td>
+          </tr>
+        )
+      }}
+    </BasicTable>
   )
 }
 
