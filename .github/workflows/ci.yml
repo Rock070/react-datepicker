@@ -1,6 +1,9 @@
 name: CI
 run-name: ${{ github.actor }} is running GitHub Actions 🚀
 on:
+  push:
+    branches:
+      - develop
   pull_request:
     branches:
       - master
@@ -8,6 +11,26 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - run: pnpm install
-      - run: pnpm lint:js
-      - run: build
+      - name: Check out to my repo
+      - uses: actions/checkout@v3
+
+      - name: Set node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.16
+          cache: pnpm
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+
+      - name: Setup
+        run: pnpm install
+
+      - name: Lint
+        run: pnpm lint:js
+
+      - name: Type Checking
+        run: pnpm tsc
+
+      - name: Build
+        - run: pnpm vite build
