@@ -1,4 +1,4 @@
-import React, { useRef, useMemo } from 'react'
+import React, { useRef, useState, useMemo } from 'react'
 import { useCalendarContext } from '@/hooks/useCalendarContext'
 import { Icon } from '@iconify/react'
 import { CALENDER_HEADER, MONTH_NAMES, DAYS_NUM_IN_ONE_ROW } from '@/helpers/const'
@@ -16,34 +16,73 @@ import setCalculatedTime from '@/helpers/setCalculatedTime'
 
 import BasicButton from '@/components/Atoms/BasicButton'
 import BasicTable from '@/components/Atoms/BasicTable'
-import { ViewMode } from '@/types'
+import { ViewMode, Mode } from '@/types'
 
 import type { DateBtn } from '@/types'
 
 export const MolCalendarBody: React.FC = () => {
   const ctx = useCalendarContext()
   if (!ctx) return <></>
-  const { date, displayDate, setDisplayDate, setDate } = ctx
+  const { date, setDate, displayDate, setDisplayDate, mode } = ctx
+  const [hoverDate, setHoverDate] = useState(date)
 
-  const calendar = getCalendar(displayDate)
-
+  const isChoosingDateRange = useMemo(() => (Mode.DateRange & mode) && Array.isArray(date) && date[0] !== undefined && date[1] === undefined, [date])
+  const isRangeHoverHandler = (itemDate: Date) => {
+    if (!isChoosingDateRange) return false
+    if (!Array.isArray(date)) return false
+    if (hoverDate < date[0]) return itemDate < date[0] && itemDate > hoverDate
+    return itemDate > date[0] && itemDate < hoverDate
+  }
   const calendarDisplay = useMemo<DateBtn[][]>(() => {
-    const result = calendar.map(item => (
-      {
+    const result = getCalendar(displayDate).map(item => {
+      const isSelected = (function () {
+        if (Array.isArray(date) && Mode.DateRange & mode) {
+          if (date[0] === undefined) return false
+          if (isChoosingDateRange) return isSameTimestamp(item.date, date[0])
+          return date[0] <= item.date && item.date <= date[1]
+        }
+
+        if (!Array.isArray(date)) return isSameTimestamp(item.date, date)
+      }())
+
+      return {
         ...item,
         clickFn: () => {
           setDisplayDate(item.date)
+          if (Mode.DateRange & mode && Array.isArray(date)) {
+            if (isChoosingDateRange) {
+              // @ts-expect-error
+              if (item.date < date[0]) setDate([item.date, ...date])
+              // @ts-expect-error
+              else setDate([...date, item.date])
+              // @ts-expect-error
+            } else setDate([item.date])
+            return
+          }
+          // @ts-expect-error
           setDate(item.date)
         },
-        mouseFn: () => {
-          console.log('mouse')
+        onMouseEnter: () => {
+          setHoverDate(item.date)
         },
-        isHover: false,
-        isSelected: isSameTimestamp(item.date, date)
+        isRangeHover: isRangeHoverHandler(item.date),
+        isSelected
       }
-    ))
+    })
+
     return splitGroup(result, DAYS_NUM_IN_ONE_ROW)
-  }, [date])
+  }, [displayDate, isChoosingDateRange, hoverDate])
+
+  // const isMouseOver = (item: DateBtn): boolean => {
+  //   console.log(item)
+  //   if (!isChoosingDateRange) return false
+  //   if (!Array.isArray(date)) return false
+  //   item.isRangeHover = true
+  //   console.log(calendarDisplay)
+  //   // return itemDate < date[0]
+
+  //   return true
+  // }
 
   const tableRef = useRef<HTMLTableElement | null>(null)
 
@@ -52,10 +91,8 @@ export const MolCalendarBody: React.FC = () => {
 
   //   // const wheelHandler = throttle((event: WheelEvent) => {
   //   const wheelHandler = (event: WheelEvent) => {
-  //     // console.log(event)
   //     const direction = getWheelXDirection(event)
   //     if (direction === WheelDirection.LEFT) {
-  //       console.log(displayDate)
   //       const date = minus(displayDate, { months: 1 })
   //       setDisplayDate(date)
   //     } else if (direction === WheelDirection.RIGHT) {
@@ -86,14 +123,16 @@ export const MolCalendarBody: React.FC = () => {
                  <td
                    key={ item.timestamp }
                    onClick={item.clickFn}
-                   onMouseEnter={item.mouseFn}
+                  onMouseEnter={item.onMouseEnter}
                    className={cx(
-                     'p1 text-center rounded-1 cursor-pointer select-none',
+                     'p1 text-center cursor-pointer select-none',
                      {
                        'text-gray': !item.isThisMonth,
-                       'bg-blue': item.isSelected,
+                       'bg-blue text-white': item.isSelected,
 
-                       'hover:bg-gray-2': !item.isSelected
+                       'hover:bg-gray-2': !item.isSelected,
+
+                       'bg-gray-2': item.isRangeHover
                      }
                    )}
                  >
@@ -103,7 +142,6 @@ export const MolCalendarBody: React.FC = () => {
              }
            </tr>
           )}
-
         </>
       }}
   </BasicTable>

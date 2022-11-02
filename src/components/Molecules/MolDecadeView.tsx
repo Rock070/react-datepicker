@@ -84,7 +84,7 @@ export const MolDecadeBody: React.FC = () => {
                       className={cx(
                         'w-full px-3 py-3 text-center',
                         {
-                          'bg-blue hover:bg-blue': isSameDecade(date, new Date(item.value, 1))
+                          'bg-blue hover:bg-blue': isSameDecade(date[0], new Date(item.value, 1))
                         }
                       )}
                     >

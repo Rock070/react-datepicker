@@ -103,7 +103,7 @@ export const MolMonthBody: React.FC = () => {
                         onClick={() => setDisplayMonth(item.value)}
                         className={cx(
                           'w-full py-3 text-center',
-                          { 'bg-blue hover:bg-blue': isSameYearMonth(date, new Date(y, item.value)) }
+                          { 'bg-blue hover:bg-blue': isSameYearMonth(date[0], new Date(y, item.value)) }
                         )}
                       >
                         { item.text }
