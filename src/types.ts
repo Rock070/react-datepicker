@@ -9,7 +9,8 @@ export interface DateBtn {
   disabled?: boolean
   isThisMonth: boolean
 
-  isHover?: boolean
+  isRangeHover?: boolean
+  onMouseEnter?: (...arg: any[]) => void
 }
 
 export interface Time {
