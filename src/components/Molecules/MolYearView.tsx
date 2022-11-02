@@ -82,7 +82,7 @@ export const MolYearBody: React.FC = () => {
                           className={cx(
                             'w-full px-3 py-3 text-center',
                             {
-                              'bg-blue hover:bg-blue': isSameYear(date, new Date(item, 1))
+                              'bg-blue hover:bg-blue': isSameYear(date[0], new Date(item, 1))
                             }
                           )}
                         >

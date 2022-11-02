@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { CalendarContext } from '@/hooks/useCalendarContext'
 
-import cx from 'classnames'
 import MolCalendar from '@/components/Molecules/MolCalendarView'
 import MolMonth from '@/components/Molecules/MolMonthView'
 import MolYear from '@/components/Molecules/MolYearView'
@@ -10,16 +9,16 @@ import MolDecade from '@/components/Molecules/MolDecadeView'
 import { ViewMode, Mode } from '@/types'
 
 export interface CalendarProps {
-  date: Date
-  setDate: (date: Date) => void
+  mode: Mode
+  date: Date[] | Date
+  setDate: React.Dispatch<React.SetStateAction<Date>> | React.Dispatch<React.SetStateAction<Date[]>>
   width?: number
 }
 
 const Calendar: React.FC<CalendarProps> = (props) => {
-  const { date, setDate, width = 350 } = props
-  const [displayDate, setDisplayDate] = useState(date)
+  const { date, setDate, width = 350, mode } = props
+  const [displayDate, setDisplayDate] = Array.isArray(date) ? useState(date[0]) : useState(date)
   const [viewMode, changeViewMode] = useState<ViewMode>(ViewMode.Calendar)
-  const [mode, changeMode] = useState<Mode>(Mode.DatePicker)
 
   const DisplayView = (function () {
     switch (viewMode) {
@@ -41,8 +40,10 @@ const Calendar: React.FC<CalendarProps> = (props) => {
       setDisplayDate,
       changeViewMode,
       date,
-      setDate
+      setDate,
+      mode
     }}>
+
     <div className="space-y-6">
       <div className="flex flex-col items-center">
         <div>
