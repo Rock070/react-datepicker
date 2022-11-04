@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react'
-import { useCalendarContext } from '@/hooks/useCalendarContext'
-import { Icon } from '@iconify/react'
+import { useCalendarContext } from '@/hooks/useCalendar'
 import cx from 'classnames'
 import { MONTH_NAMES } from '@/helpers/const'
 
@@ -16,6 +15,7 @@ import setCalculatedTime from '@/helpers/setCalculatedTime'
 
 import BasicButton from '@/components/Atoms/BasicButton'
 import BasicTable from '@/components/Atoms/BasicTable'
+import MolButtonArrowPair from '@/components/Molecules/MolButtonArrowPair'
 
 import { ViewMode } from '@/types'
 
@@ -31,25 +31,17 @@ export const MolMonthHeader: React.FC = () => {
   }, [displayDate])
 
   return (
-    <div className="flex justify-between items-center">
-    <div>
-      <BasicButton onClick={() => setCalculatedTime(displayDate, minus, { years: 10 }, setDisplayDate)}>
-        <Icon icon="ant-design:double-left-outlined" />
-      </BasicButton>
-      <BasicButton onClick={() => setCalculatedTime(displayDate, minus, { years: 1 }, setDisplayDate)}>
-        <Icon icon="akar-icons:chevron-left" />
-      </BasicButton>
-    </div>
-    <BasicButton onClick={() => changeViewMode(ViewMode.Year)} >{nowYear}</BasicButton>
-    <div>
-    <BasicButton onClick={() => setCalculatedTime(displayDate, add, { years: 1 }, setDisplayDate)}>
-        <Icon icon="akar-icons:chevron-right" />
-      </BasicButton>
-      <BasicButton onClick={() => setCalculatedTime(displayDate, add, { years: 10 }, setDisplayDate)}>
-        <Icon icon="ant-design:double-right-outlined" />
-      </BasicButton>
-    </div>
-  </div>
+    <MolButtonArrowPair
+      displayTitle={nowYear}
+      displayTitleHandler={() => changeViewMode(ViewMode.Year)}
+      isDoubleArrow={true}
+      handler={{
+        doubleLeft: () => setCalculatedTime(displayDate, minus, { years: 10 }, setDisplayDate),
+        left: () => setCalculatedTime(displayDate, minus, { years: 1 }, setDisplayDate),
+        right: () => setCalculatedTime(displayDate, add, { years: 1 }, setDisplayDate),
+        doubleRight: () => setCalculatedTime(displayDate, add, { years: 10 }, setDisplayDate)
+      }}
+    />
   )
 }
 interface TransformMonth {

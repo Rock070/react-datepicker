@@ -1,8 +1,7 @@
 import React, { useMemo } from 'react'
-import { useCalendarContext } from '@/hooks/useCalendarContext'
+import { useCalendarContext } from '@/hooks/useCalendar'
 
 import cx from 'classnames'
-import { Icon } from '@iconify/react'
 
 import add from '@/utils/time/add'
 import minus from '@/utils/time/minus'
@@ -14,6 +13,7 @@ import setCalculatedTime from '@/helpers/setCalculatedTime'
 
 import BasicButton from '@/components/Atoms/BasicButton'
 import BasicTable from '@/components/Atoms/BasicTable'
+import MolButtonArrowPair from '@/components/Molecules/MolButtonArrowPair'
 
 import { ViewMode } from '@/types'
 
@@ -29,25 +29,17 @@ export const MolYearHeader: React.FC = () => {
   }, [displayDate])
 
   return (
-    <div className="flex justify-between items-center">
-    <div>
-      <BasicButton onClick={() => setCalculatedTime(displayDate, minus, { years: 100 }, setDisplayDate)}>
-        <Icon icon="ant-design:double-left-outlined" />
-      </BasicButton>
-      <BasicButton onClick={() => setCalculatedTime(displayDate, minus, { years: 10 }, setDisplayDate)}>
-        <Icon icon="akar-icons:chevron-left" />
-      </BasicButton>
-    </div>
-    <BasicButton onClick={() => changeViewMode(ViewMode.Decade)}> {nowDecadeDisplay}</BasicButton>
-    <div>
-    <BasicButton onClick={() => setCalculatedTime(displayDate, add, { years: 10 }, setDisplayDate)}>
-        <Icon icon="akar-icons:chevron-right" />
-      </BasicButton>
-      <BasicButton onClick={() => setCalculatedTime(displayDate, add, { years: 100 }, setDisplayDate)}>
-        <Icon icon="ant-design:double-right-outlined" />
-      </BasicButton>
-    </div>
-  </div>
+    <MolButtonArrowPair
+      displayTitle={nowDecadeDisplay}
+      displayTitleHandler={() => changeViewMode(ViewMode.Decade)}
+      isDoubleArrow={true}
+      handler={{
+        doubleLeft: () => setCalculatedTime(displayDate, minus, { years: 100 }, setDisplayDate),
+        left: () => setCalculatedTime(displayDate, minus, { years: 10 }, setDisplayDate),
+        right: () => setCalculatedTime(displayDate, add, { years: 10 }, setDisplayDate),
+        doubleRight: () => setCalculatedTime(displayDate, add, { years: 100 }, setDisplayDate)
+      }}
+    />
   )
 }
 

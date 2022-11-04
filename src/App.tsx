@@ -1,6 +1,10 @@
 import React, { useState } from 'react'
 import reactLogo from './assets/react.svg'
-import Calendar from '@/components/Organisms/Calendar'
+// import Calendar from '@/components/Organisms/OrgCalendar'
+import OrgCalendar from '@/components/Organisms/OrgCalendar'
+
+import OrgRangeCalendar from '@/components/Organisms/OrgRangeCalendar'
+
 import { Mode } from '@/types'
 
 const App: React.FC = () => {
@@ -16,9 +20,6 @@ const App: React.FC = () => {
     <div className="w-screen h-screen flex justify-center items-center">
       <div className='flex flex-col items-center space-y-5 h-full pt-20'>
         <img src={reactLogo} alt="logo" />
-        {/* <div>{{ date }}</div> */}
-        {/* @ts-expect-error */}
-        <div>{date?.[0]?.toLocaleDateString()} - {date?.[1]?.toLocaleDateString()}</div>
 
         <h2>mode: {mode}</h2>
         <select
@@ -28,11 +29,26 @@ const App: React.FC = () => {
           <option value={Mode.DatePicker}>DatePicker</option>
           <option value={Mode.DateRange}>DateRange</option>
         </select>
-        <Calendar
-          date={mode & Mode.DatePicker ? date : rangeDate}
-          setDate={mode & Mode.DatePicker ? setDate : setRangeDate}
-          mode={mode}
-        />
+        <div className="flex space-x-10 text-center">
+          <div>
+            <div>Calendar</div>
+            <div>{date.toLocaleDateString()}</div>
+            <OrgCalendar
+              date={date}
+              setDate={setDate}
+              mode={Mode.DatePicker}
+            />
+            </div>
+          <div>
+            <div>RangeCalendar</div>
+            <div>{rangeDate[0]?.toLocaleDateString()} - {rangeDate[1]?.toLocaleDateString()}</div>
+            <OrgRangeCalendar
+              date={rangeDate}
+              setDate={setRangeDate}
+              mode={Mode.DateRange}
+            />
+          </div>
+        </div>
       </div>
     </div>
   )

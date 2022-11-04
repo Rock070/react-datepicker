@@ -1,8 +1,7 @@
 import React, { useMemo } from 'react'
-import { useCalendarContext } from '@/hooks/useCalendarContext'
+import { useCalendarContext } from '@/hooks/useCalendar'
 
 import cx from 'classnames'
-import { Icon } from '@iconify/react'
 
 import add from '@/utils/time/add'
 import minus from '@/utils/time/minus'
@@ -15,6 +14,7 @@ import setCalculatedTime from '@/helpers/setCalculatedTime'
 
 import BasicButton from '@/components/Atoms/BasicButton'
 import BasicTable from '@/components/Atoms/BasicTable'
+import MolButtonArrowPair from '@/components/Molecules/MolButtonArrowPair'
 
 import { ViewMode } from '@/types'
 
@@ -30,19 +30,14 @@ export const MolDecadeHeader: React.FC = () => {
   }, [displayDate])
 
   return (
-    <div className="flex justify-between items-center">
-    <div>
-      <BasicButton onClick={() => setCalculatedTime(displayDate, minus, { years: 100 }, setDisplayDate)}>
-        <Icon icon="akar-icons:chevron-left" />
-      </BasicButton>
-    </div>
-    <BasicButton disabled={true}> {nowDecadeDisplay}</BasicButton>
-    <div>
-      <BasicButton onClick={() => setCalculatedTime(displayDate, add, { years: 100 }, setDisplayDate)}>
-        <Icon icon="akar-icons:chevron-right" />
-      </BasicButton>
-    </div>
-  </div>
+    <MolButtonArrowPair
+      titleDisabled={true}
+      displayTitle={nowDecadeDisplay}
+      handler={{
+        left: () => setCalculatedTime(displayDate, minus, { years: 100 }, setDisplayDate),
+        right: () => setCalculatedTime(displayDate, add, { years: 100 }, setDisplayDate)
+      }}
+    />
   )
 }
 
@@ -69,6 +64,14 @@ export const MolDecadeBody: React.FC = () => {
     changeViewMode(ViewMode.Year)
   }
 
+  const getIsSelected = (itemDate: Date) => {
+    if (!Array.isArray(date)) return isSameDecade(date, itemDate)
+
+    if (date[0] === undefined) return false
+    if (date[1] === undefined) return isSameDecade(date[0], itemDate)
+    return date[0] <= itemDate && itemDate <= date[1]
+  }
+
   return (
     <BasicTable>
     {{
@@ -84,7 +87,7 @@ export const MolDecadeBody: React.FC = () => {
                       className={cx(
                         'w-full px-3 py-3 text-center',
                         {
-                          'bg-blue hover:bg-blue': isSameDecade(date[0], new Date(item.value, 1))
+                          'bg-blue hover:bg-blue': getIsSelected(new Date(item.value, 1))
                         }
                       )}
                     >
