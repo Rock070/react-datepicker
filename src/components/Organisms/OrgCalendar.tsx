@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
-import { CalendarContext } from '@/hooks/useCalendar'
+import { useCalendar, CalendarContext, useTableContext } from '@/hooks/useCalendar'
+import { DateRangeContext } from '@/hooks/useDateRange'
 
-import MolCalendar from '@/components/Molecules/MolDaysView'
+import MolDay from '@/components/Molecules/MolDaysView'
 import MolMonth from '@/components/Molecules/MolMonthsView'
 import MolYear from '@/components/Molecules/MolYearsView'
 import MolDecade from '@/components/Molecules/MolDecadesView'
@@ -10,15 +11,36 @@ import { ViewMode, Mode } from '@/types'
 
 export interface CalendarProps {
   mode: Mode
-  date: Date
+  date: Date | Date[]
   setDate: React.Dispatch<React.SetStateAction<Date>>
   width?: number
 }
 // TODO: multiple
 const Calendar: React.FC<CalendarProps> = (props) => {
   const { date, setDate, width = 350, mode } = props
-  const [displayDate, setDisplayDate] = useState(date)
-  const [viewMode, changeViewMode] = useState<ViewMode>(ViewMode.Calendar)
+  const useFn = (function () {
+    switch (mode) {
+      case Mode.DateRange:
+        return useCalendar
+      case Mode.DatePicker:
+      default:
+        return useCalendar
+    }
+  }())
+  const {
+    viewMode,
+    ...rest
+  } = useFn(date)
+
+  const CalendarProviderContext = (function () {
+    switch (mode) {
+      case Mode.DateRange:
+        return DateRangeContext
+      case Mode.DatePicker:
+      default:
+        return CalendarContext
+    }
+  }())
 
   const DisplayView = (function () {
     switch (viewMode) {
@@ -30,23 +52,21 @@ const Calendar: React.FC<CalendarProps> = (props) => {
         return MolDecade
       case ViewMode.Calendar:
       default:
-        return MolCalendar
+        return MolDay
     }
   }())
 
   return (
-    <CalendarContext.Provider value={{
-      displayDate,
-      setDisplayDate,
-      changeViewMode,
+    <CalendarProviderContext.Provider value={{
       date,
       setDate,
-      mode
+      viewMode,
+      mode,
+      ...rest
     }}>
 
     <div className="space-y-6">
-      <div className="flex flex-col items-center">
-      </div>
+      <div/>
       <div
         style={{ width: `${width}px` }}
         className='
@@ -57,7 +77,7 @@ const Calendar: React.FC<CalendarProps> = (props) => {
         <DisplayView />
       </div>
     </div>
-    </CalendarContext.Provider>
+    </CalendarProviderContext.Provider>
   )
 }
 

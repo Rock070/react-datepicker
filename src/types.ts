@@ -13,6 +13,17 @@ export interface DateBtn {
   onMouseEnter?: (...arg: any[]) => void
 }
 
+// TODO 整合 BTN TYPE
+export interface MonthBtn {
+  value: number | string
+  text: string
+  clickFn?: () => void
+
+  disabled?: boolean
+
+  isSelected?: boolean
+}
+
 export interface Time {
   y: number
   m: number

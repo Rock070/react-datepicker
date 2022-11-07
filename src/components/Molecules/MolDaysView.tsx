@@ -1,5 +1,5 @@
 import React from 'react'
-import { useCalendarBody, useCalendarHeader } from '@/hooks/useCalendar'
+import { useTableContext } from '@/hooks/useCalendar'
 import { CALENDER_HEADER } from '@/helpers/const'
 
 import cx from 'classnames'
@@ -14,7 +14,10 @@ import MolButtonArrowPair from '@/components/Molecules/MolButtonArrowPair'
 import { ViewMode } from '@/types'
 
 export const MolCalendarBody: React.FC = () => {
-  const calendarDisplay = useCalendarBody()
+  const ctx = useTableContext()
+  if (!ctx) return <></>
+
+  const { dayBody: calendarDisplay } = ctx
 
   if (calendarDisplay == null) return <></>
 
@@ -56,17 +59,17 @@ export const MolCalendarBody: React.FC = () => {
 }
 
 export const MolCalendarHeader: React.FC = () => {
-  const ctx = useCalendarHeader()
+  const ctx = useTableContext()
   if (!ctx) return <></>
   const {
     displayDate,
-    nowYearMonth,
     changeViewMode,
-    setDisplayDate
+    setDisplayDate,
+    dayHeader
   } = ctx
   return (
     <MolButtonArrowPair
-      displayTitle={nowYearMonth}
+      displayTitle={ dayHeader?.displayText ?? '' }
       displayTitleHandler={() => changeViewMode(ViewMode.Month)}
       isDoubleArrow={true}
       handler={{

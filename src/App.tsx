@@ -41,12 +41,12 @@ const App: React.FC = () => {
             </div>
           <div>
             <div>RangeCalendar</div>
-            <div>{rangeDate[0]?.toLocaleDateString()} - {rangeDate[1]?.toLocaleDateString()}</div>
-            <OrgRangeCalendar
+            {/* <div>{rangeDate[0]?.toLocaleDateString()} - {rangeDate[1]?.toLocaleDateString()}</div> */}
+            {/* <OrgRangeCalendar
               date={rangeDate}
               setDate={setRangeDate}
               mode={Mode.DateRange}
-            />
+            /> */}
           </div>
         </div>
       </div>

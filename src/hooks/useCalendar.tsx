@@ -1,29 +1,53 @@
 import { useState, useMemo, useContext, createContext } from 'react'
 import { DAYS_NUM_IN_ONE_ROW, MONTH_NAMES } from '@/helpers/const'
 
-import { ViewMode, DateBtn, Mode } from '@/types'
+import { ViewMode, DateBtn, MonthBtn, Mode } from '@/types'
 
 import { get } from '@/utils/time/get'
+import getDecade from '@/utils/time/getDecade'
 import isSameTimestamp from '@/utils/time/isSameTimestamp'
+import isSameYear from '@/utils/time/isSameYear'
+import isSameDecade from '@/utils/time/isSameDecade'
+import getCentury from '@/utils/time/getCentury'
+
 import splitGroup from '@/utils/splitGroup'
+import pipe from '@/utils/pipe'
 
 import getCalendar from '@/helpers/getCalendar'
+import isSameYearMonth from '@/helpers/isSameYearMonth'
 
 interface CalendarContextKey {
   displayDate: Date
   setDisplayDate: (date: Date) => void
   changeViewMode: (mode: ViewMode) => void
-  date: Date | Date[]
-  setDate: React.Dispatch<React.SetStateAction<Date>> | React.Dispatch<React.SetStateAction<Date[]>>
+  date: Date
+  setDate: React.Dispatch<React.SetStateAction<Date>>
   mode: Mode
 }
 
 export const CalendarContext = createContext<CalendarContextKey | null>(null)
 export const useCalendarContext = () => useContext(CalendarContext)
 
-export const useCalendarBody = () => {
+export const useCalendar = (
+  date: Date
+) => {
+  const [displayDate, setDisplayDate] = useState(date)
+  const [viewMode, changeViewMode] = useState<ViewMode>(ViewMode.Calendar)
+
+  // body
+
+  return {
+    displayDate,
+    setDisplayDate,
+    viewMode,
+    changeViewMode
+  }
+}
+
+const _useDatesBody = () => {
   const ctx = useCalendarContext()
   if (!ctx) return null
+
   const { date, setDate, displayDate, setDisplayDate, mode } = ctx
   const [hoverDate, setHoverDate] = useState(date)
 
@@ -34,6 +58,7 @@ export const useCalendarBody = () => {
     if (hoverDate < date[0]) return itemDate < date[0] && itemDate > hoverDate
     return itemDate > date[0] && itemDate < hoverDate
   }
+
   const calendarDisplay = useMemo<DateBtn[][]>(() => {
     const result = getCalendar(displayDate).map(item => {
       const isSelected = (function () {
@@ -60,7 +85,7 @@ export const useCalendarBody = () => {
             } else setDate([item.date])
             return
           }
-          // @ts-expect-error
+
           setDate(item.date)
         },
         onMouseEnter: () => {
@@ -78,21 +103,207 @@ export const useCalendarBody = () => {
   return calendarDisplay
 }
 
-export const useCalendarHeader = () => {
+const _useDatesHeader = () => {
   const ctx = useCalendarContext()
   if (!ctx) return null
-  const { displayDate, setDisplayDate, changeViewMode } = ctx
+  const { displayDate } = ctx
 
-  const nowYearMonth = useMemo(() => {
+  const displayText = useMemo(() => {
     const { y, m } = get(displayDate)
 
     return `${MONTH_NAMES[m]} ${y}`
   }, [displayDate])
 
   return {
+    displayText
+  }
+}
+
+const _useMonthsHeader = () => {
+  const ctx = useCalendarContext()
+  if (!ctx) return null
+  const { displayDate } = ctx
+
+  const displayText = useMemo(() => {
+    const { y } = get(displayDate)
+
+    return `${y}`
+  }, [displayDate])
+
+  return { displayText }
+}
+
+const _useMonthsBody = () => {
+  const ctx = useCalendarContext()
+  if (!ctx) return null
+
+  const { date, displayDate, setDisplayDate, changeViewMode } = ctx
+
+  const { y } = get(displayDate)
+  const setDisplayMonth = (monthVal: number) => {
+    const selectMonth = new Date(y, monthVal)
+    setDisplayDate(selectMonth)
+    changeViewMode(ViewMode.Calendar)
+  }
+
+  const transformMonth = (months: string[]): MonthBtn[] => {
+    return months.map((m, index) => (
+      {
+        value: index,
+        text: m,
+        clickFn: () => setDisplayMonth(index),
+        disabled: false,
+        // isSelected: isSameYearMonth(date[0], new Date(y, item.value)) }
+        isSelected: isSameYearMonth(date, new Date(y, index))
+      }
+    ))
+  }
+  const pipeLine = pipe(
+    transformMonth,
+    (months: MonthBtn[]) => splitGroup(months, 3)
+  )
+  const monthGroup = pipeLine(MONTH_NAMES) as MonthBtn[][]
+
+  return {
+    displayMonth: monthGroup
+  }
+}
+
+const _useYearsHeader = () => {
+  const ctx = useCalendarContext()
+  if (!ctx) return null
+  const { displayDate } = ctx
+
+  const displayText = useMemo(() => {
+    const y = getDecade(displayDate)
+
+    return `${y + 1} - ${y + 10}`
+  }, [displayDate])
+
+  return { displayText }
+}
+
+const _useYearsBody = () => {
+  const ctx = useCalendarContext()
+  if (!ctx) return null
+
+  const { date, displayDate, setDisplayDate, changeViewMode } = ctx
+
+  const year = getDecade(displayDate)
+  const years = Array.from({ length: 10 }, (_, index) => year + index + 1)
+
+  const setDisplayYear = (yearVal: number) => {
+    const selectYear = new Date(yearVal, 1)
+    setDisplayDate(selectYear)
+    changeViewMode(ViewMode.Month)
+  }
+
+  const transformYear = (months: number[]): MonthBtn[] => {
+    return months.map((y, index) => (
+      {
+        value: index,
+        text: String(y),
+        clickFn: () => setDisplayYear(y),
+        disabled: false,
+        // isSelected: isSameYear(date[0], new Date(y, item.value)) }
+        isSelected: isSameYear(date, new Date(y, 1))
+      }
+    ))
+  }
+  const pipeLine = pipe(
+    transformYear,
+    (years: MonthBtn[]) => splitGroup(years, 3)
+  )
+  const yearGroup = pipeLine(years) as MonthBtn[][]
+
+  return {
+    displayYear: yearGroup
+  }
+}
+const _useDecadesHeader = () => {
+  const ctx = useCalendarContext()
+  if (!ctx) return null
+  const { displayDate } = ctx
+
+  const displayText = useMemo(() => {
+    const y = getCentury(displayDate)
+
+    return `${y + 1} - ${y + 100}`
+  }, [displayDate])
+
+  return { displayText }
+}
+
+const _useDecadesBody = () => {
+  const ctx = useCalendarContext()
+  if (!ctx) return null
+
+  const { date, displayDate, setDisplayDate, changeViewMode } = ctx
+
+  const decade = getCentury(displayDate)
+  const decades = Array.from({ length: 10 }, (_, index) => {
+    const RATE = 10
+
+    return {
+      value: decade + index * RATE,
+      text: `${(decade + index * RATE) + 1} - ${decade + ((index + 1) * RATE)}`
+    }
+  })
+
+  const setDisplayDecade = (yearVal: number) => {
+    const selectDecade = new Date(yearVal, 1)
+    setDisplayDate(selectDecade)
+    changeViewMode(ViewMode.Year)
+  }
+
+  const getIsSelected = (itemDate: Date) => {
+    if (!Array.isArray(date)) return isSameDecade(date, itemDate)
+
+    if (date[0] === undefined) return false
+    if (date[1] === undefined) return isSameDecade(date[0], itemDate)
+    return date[0] <= itemDate && itemDate <= date[1]
+  }
+
+  const transformDecade = (months: typeof decades): MonthBtn[] => {
+    return months.map((item, index) => (
+      {
+        ...item,
+        clickFn: () => setDisplayDecade(item.value),
+        disabled: false,
+        // isSelected: isSameYear(date[0], new Date(y, item.value)) }
+        isSelected: getIsSelected(new Date(item.value, 1))
+      }
+    ))
+  }
+  const pipeLine = pipe(
+    transformDecade,
+    (decades: MonthBtn[]) => splitGroup(decades, 3)
+  )
+  const decadeGroup = pipeLine(decades) as MonthBtn[][]
+
+  return {
+    displayDecade: decadeGroup
+  }
+}
+
+export const useTableContext = () => {
+  const ctx = useCalendarContext()
+  if (!ctx) return null
+  const { date, setDate, displayDate, setDisplayDate, mode, changeViewMode } = ctx
+  return {
+    date,
+    setDate,
     displayDate,
-    nowYearMonth,
+    setDisplayDate,
+    mode,
     changeViewMode,
-    setDisplayDate
+    dayHeader: _useDatesHeader(),
+    dayBody: _useDatesBody(),
+    monthHeader: _useMonthsHeader(),
+    monthBody: _useMonthsBody(),
+    yearHeader: _useYearsHeader(),
+    yearBody: _useYearsBody(),
+    decadeHeader: _useDecadesHeader(),
+    decadeBody: _useDecadesBody()
   }
 }

@@ -1,13 +1,10 @@
-import React, { useMemo } from 'react'
-import { useCalendarContext } from '@/hooks/useCalendar'
+import React from 'react'
+import { useTableContext } from '@/hooks/useCalendar'
 
 import cx from 'classnames'
 
 import add from '@/utils/time/add'
 import minus from '@/utils/time/minus'
-import isSameYear from '@/utils/time/isSameYear'
-import getDecade from '@/utils/time/getDecade'
-import splitGroup from '@/utils/splitGroup'
 
 import setCalculatedTime from '@/helpers/setCalculatedTime'
 
@@ -18,19 +15,18 @@ import MolButtonArrowPair from '@/components/Molecules/MolButtonArrowPair'
 import { ViewMode } from '@/types'
 
 export const MolYearHeader: React.FC = () => {
-  const ctx = useCalendarContext()
+  const ctx = useTableContext()
   if (!ctx) return <></>
-  const { displayDate, setDisplayDate, changeViewMode } = ctx
-
-  const nowDecadeDisplay = useMemo(() => {
-    const y = getDecade(displayDate)
-
-    return `${y + 1} - ${y + 10}`
-  }, [displayDate])
+  const {
+    displayDate,
+    changeViewMode,
+    setDisplayDate,
+    yearHeader
+  } = ctx
 
   return (
     <MolButtonArrowPair
-      displayTitle={nowDecadeDisplay}
+      displayTitle={yearHeader?.displayText ?? ''}
       displayTitleHandler={() => changeViewMode(ViewMode.Decade)}
       isDoubleArrow={true}
       handler={{
@@ -44,19 +40,14 @@ export const MolYearHeader: React.FC = () => {
 }
 
 export const MolYearBody: React.FC = () => {
-  const ctx = useCalendarContext()
+  const ctx = useTableContext()
   if (!ctx) return <></>
-  const { date, displayDate, setDisplayDate, changeViewMode } = ctx
-  const year = getDecade(displayDate)
-  const years = Array.from({ length: 10 }, (_, index) => year + index + 1)
 
-  const yearGroup = splitGroup(years, 3)
+  const { yearBody } = ctx
 
-  const setDisplayYear = (yearVal: number) => {
-    const selectYear = new Date(yearVal, 1)
-    setDisplayDate(selectYear)
-    changeViewMode(ViewMode.Month)
-  }
+  if (yearBody == null) return <></>
+
+  const { displayYear } = yearBody
 
   return (
     <BasicTable>
@@ -64,21 +55,21 @@ export const MolYearBody: React.FC = () => {
         body:
           <>
             {
-              yearGroup.map((group, index) => (
+              displayYear.map((group, index) => (
                 <tr key={index}>
                   {
                     group.map((item, id) => (
                       <td key={id}>
                         <BasicButton
-                          onClick={() => setDisplayYear(item)}
+                          onClick={item.clickFn}
                           className={cx(
                             'w-full px-3 py-3 text-center',
                             {
-                              'bg-blue hover:bg-blue': isSameYear(date[0], new Date(item, 1))
+                              'bg-blue hover:bg-blue': item.isSelected
                             }
                           )}
                         >
-                          { item }
+                          { item.text }
                         </BasicButton>
                       </td>
                     ))
