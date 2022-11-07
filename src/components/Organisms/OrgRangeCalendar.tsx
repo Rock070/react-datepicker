@@ -19,7 +19,7 @@ const Calendar: React.FC<CalendarProps> = (props) => {
   const { date, setDate, width = 350, mode } = props
 
   const [displayDate, setDisplayDate] = useState(date[0])
-  const [viewMode, changeViewMode] = useState<ViewMode>(ViewMode.Calendar)
+  const [viewMode, changeViewMode] = useState<ViewMode>(ViewMode.Day)
 
   const DisplayView = (function () {
     switch (viewMode) {
@@ -29,7 +29,7 @@ const Calendar: React.FC<CalendarProps> = (props) => {
         return MolYear
       case ViewMode.Decade:
         return MolDecade
-      case ViewMode.Calendar:
+      case ViewMode.Day:
       default:
         return MolCalendar
     }

@@ -1,5 +1,4 @@
 import React from 'react'
-import { useTableContext } from '@/hooks/useCalendar'
 
 import cx from 'classnames'
 
@@ -12,19 +11,25 @@ import BasicButton from '@/components/Atoms/BasicButton'
 import BasicTable from '@/components/Atoms/BasicTable'
 import MolButtonArrowPair from '@/components/Molecules/MolButtonArrowPair'
 
-export const MolDecadeHeader: React.FC = () => {
-  const ctx = useTableContext()
-  if (!ctx) return <></>
+import type { CalendarBtn } from '@/types'
+
+interface MolDecadeHeaderProps {
+  decadeHeader: string
+  displayDate: Date
+  setDisplayDate: (date: Date) => void
+}
+
+export const MolDecadeHeader: React.FC<MolDecadeHeaderProps> = (props) => {
   const {
     displayDate,
     setDisplayDate,
     decadeHeader
-  } = ctx
+  } = props
 
   return (
     <MolButtonArrowPair
       titleDisabled={true}
-      displayTitle={decadeHeader?.displayText ?? ''}
+      displayTitle={decadeHeader}
       handler={{
         left: () => setCalculatedTime(displayDate, minus, { years: 100 }, setDisplayDate),
         right: () => setCalculatedTime(displayDate, add, { years: 100 }, setDisplayDate)
@@ -32,16 +37,14 @@ export const MolDecadeHeader: React.FC = () => {
     />
   )
 }
+interface MolDecadeBodyProp {
+  decadeBody: CalendarBtn[][]
+}
 
-export const MolDecadeBody: React.FC = () => {
-  const ctx = useTableContext()
-  if (!ctx) return <></>
+export const MolDecadeBody: React.FC<MolDecadeBodyProp> = (props) => {
+  const { decadeBody: displayDecade } = props
 
-  const { decadeBody } = ctx
-
-  if (decadeBody == null) return <></>
-
-  const { displayDecade } = decadeBody
+  if (displayDecade == null) return <></>
 
   return (
     <BasicTable>
@@ -75,20 +78,24 @@ export const MolDecadeBody: React.FC = () => {
   )
 }
 
-const MolDecade: React.FC = () => {
+const MolDecade: React.FC<MolDecadeHeaderProps & MolDecadeBodyProp> = (props) => {
   return (
     <BasicTable>
       {{
         header:
           <tr>
             <th>
-              <MolDecadeHeader />
+              <MolDecadeHeader
+                { ...props }
+              />
             </th>
           </tr>,
         body:
           <tr>
             <td>
-              <MolDecadeBody />
+              <MolDecadeBody
+                { ...props }
+              />
             </td>
           </tr>
       }}

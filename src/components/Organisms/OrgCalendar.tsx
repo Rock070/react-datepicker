@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
-import { useCalendar, CalendarContext } from '@/hooks/useCalendar'
-import { useDateRange, DateRangeContext } from '@/hooks/useDateRange'
+import React from 'react'
+import { useCalendar } from '@/hooks/useCalendar'
+import { useDateRange } from '@/hooks/useDateRange'
 
 import MolDay from '@/components/Molecules/MolDaysView'
 import MolMonth from '@/components/Molecules/MolMonthsView'
@@ -19,55 +19,35 @@ export interface CalendarProps {
 
 const Calendar: React.FC<CalendarProps> = (props) => {
   const { date, setDate, width = 350, mode } = props
-  console.log(mode)
   const useFn = (function () {
     switch (mode) {
       case Mode.DateRange:
-        return () => useDateRange(date[0])
+        return () => useDateRange(date, setDate)
       case Mode.DatePicker:
       default:
-        return () => useCalendar(date)
+        return () => useCalendar(date, setDate)
     }
   }())
-  console.log(useFn())
   const {
     viewMode,
     ...rest
   } = useFn()
 
-  const CalendarProviderContext = (function () {
-    switch (mode) {
-      case Mode.DateRange:
-        return DateRangeContext
-      case Mode.DatePicker:
-      default:
-        return CalendarContext
-    }
-  }())
-
   const DisplayView = (function () {
     switch (viewMode) {
-      case ViewMode.Month:
-        return MolMonth
-      case ViewMode.Year:
-        return MolYear
       case ViewMode.Decade:
         return MolDecade
-      case ViewMode.Calendar:
+      case ViewMode.Year:
+        return MolYear
+      case ViewMode.Month:
+        return MolMonth
+      case ViewMode.Day:
       default:
         return MolDay
     }
   }())
 
   return (
-    <CalendarProviderContext.Provider value={{
-      date,
-      setDate,
-      viewMode,
-      mode,
-      ...rest
-    }}>
-
     <div className="space-y-6">
       <div/>
       <div
@@ -77,10 +57,15 @@ const Calendar: React.FC<CalendarProps> = (props) => {
           shadow-sm shadow-gray
         '
       >
-        <DisplayView />
+        <DisplayView
+          date={date}
+          setDate={setDate}
+          viewMode={viewMode}
+          mode={mode}
+          { ...rest }
+        />
       </div>
     </div>
-    </CalendarProviderContext.Provider>
   )
 }
 

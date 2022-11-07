@@ -33,11 +33,11 @@ const App: React.FC = () => {
           <div>
             <div>Calendar</div>
             <div>{date.toLocaleDateString()}</div>
-            {/* <OrgCalendar
+            <OrgCalendar
               date={date}
               setDate={setDate}
               mode={Mode.DatePicker}
-            /> */}
+            />
             </div>
           <div>
             <div>RangeCalendar</div>

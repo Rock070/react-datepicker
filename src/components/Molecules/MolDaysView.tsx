@@ -1,5 +1,4 @@
 import React from 'react'
-import { useTableContext } from '@/hooks/useCalendar'
 import { CALENDER_HEADER } from '@/helpers/const'
 
 import cx from 'classnames'
@@ -11,14 +10,44 @@ import setCalculatedTime from '@/helpers/setCalculatedTime'
 
 import BasicTable from '@/components/Atoms/BasicTable'
 import MolButtonArrowPair from '@/components/Molecules/MolButtonArrowPair'
-import { ViewMode } from '@/types'
+import { ViewMode, CalendarBtn } from '@/types'
 
-export const MolCalendarBody: React.FC = () => {
-  const ctx = useTableContext()
-  if (!ctx) return <></>
+interface MolDayHeaderProps {
+  dayHeader: string
+  displayDate: Date
+  setDisplayDate: (date: Date) => void
+  changeViewMode: (mode: ViewMode) => void
+}
 
-  const { mode, dayBody: calendarDisplay } = ctx
-  console.log(mode, calendarDisplay)
+export const MolDayHeader: React.FC<MolDayHeaderProps> = (props) => {
+  const {
+    displayDate,
+    changeViewMode,
+    setDisplayDate,
+    dayHeader
+  } = props
+
+  return (
+    <MolButtonArrowPair
+      displayTitle={ dayHeader }
+      displayTitleHandler={() => changeViewMode(ViewMode.Month)}
+      isDoubleArrow={true}
+      handler={{
+        doubleLeft: () => setCalculatedTime(displayDate, minus, { years: 1 }, setDisplayDate),
+        left: () => setCalculatedTime(displayDate, minus, { months: 1 }, setDisplayDate),
+        right: () => setCalculatedTime(displayDate, add, { months: 1 }, setDisplayDate),
+        doubleRight: () => setCalculatedTime(displayDate, add, { years: 1 }, setDisplayDate)
+      }}
+    />
+  )
+}
+
+interface MolDayBodyProps {
+  dayBody: CalendarBtn[][]
+}
+
+export const MolDayBody: React.FC<MolDayBodyProps> = (props) => {
+  const { dayBody: calendarDisplay } = props
 
   if (calendarDisplay == null) return <></>
 
@@ -47,7 +76,7 @@ export const MolCalendarBody: React.FC = () => {
                      }
                    )}
                  >
-                   { item.time.d }
+                   { item?.time?.d }
                  </td>
                )
              }
@@ -59,45 +88,25 @@ export const MolCalendarBody: React.FC = () => {
   )
 }
 
-export const MolCalendarHeader: React.FC = () => {
-  const ctx = useTableContext()
-  if (!ctx) return <></>
-  const {
-    displayDate,
-    changeViewMode,
-    setDisplayDate,
-    dayHeader
-  } = ctx
-  return (
-    <MolButtonArrowPair
-      displayTitle={ dayHeader?.displayText ?? '' }
-      displayTitleHandler={() => changeViewMode(ViewMode.Month)}
-      isDoubleArrow={true}
-      handler={{
-        doubleLeft: () => setCalculatedTime(displayDate, minus, { years: 1 }, setDisplayDate),
-        left: () => setCalculatedTime(displayDate, minus, { months: 1 }, setDisplayDate),
-        right: () => setCalculatedTime(displayDate, add, { months: 1 }, setDisplayDate),
-        doubleRight: () => setCalculatedTime(displayDate, add, { years: 1 }, setDisplayDate)
-      }}
-    />
-  )
-}
-
-export default function MolCalendar () {
+const MolDay: React.FC<MolDayBodyProps & MolDayHeaderProps> = (props) => {
   return (
     <BasicTable>
       {{
         header: (
           <tr>
             <th>
-              <MolCalendarHeader />
+              <MolDayHeader
+                {...props}
+              />
             </th>
           </tr>
         ),
         body: (
           <tr>
             <td>
-              <MolCalendarBody />
+              <MolDayBody
+                {...props}
+              />
             </td>
           </tr>
         )
@@ -105,3 +114,5 @@ export default function MolCalendar () {
     </BasicTable>
   )
 }
+
+export default MolDay

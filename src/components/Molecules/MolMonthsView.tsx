@@ -1,5 +1,4 @@
 import React from 'react'
-import { useTableContext } from '@/hooks/useCalendar'
 import cx from 'classnames'
 
 import add from '@/utils/time/add'
@@ -11,21 +10,26 @@ import BasicButton from '@/components/Atoms/BasicButton'
 import BasicTable from '@/components/Atoms/BasicTable'
 import MolButtonArrowPair from '@/components/Molecules/MolButtonArrowPair'
 
-import { ViewMode } from '@/types'
+import { ViewMode, CalendarBtn } from '@/types'
 
-export const MolMonthHeader: React.FC = () => {
-  const ctx = useTableContext()
-  if (!ctx) return <></>
+interface MolMonthHeaderProps {
+  monthHeader: string
+  displayDate: Date
+  setDisplayDate: (date: Date) => void
+  changeViewMode: (mode: ViewMode) => void
+}
+
+export const MolMonthHeader: React.FC<MolMonthHeaderProps> = (props) => {
   const {
     displayDate,
     changeViewMode,
     setDisplayDate,
     monthHeader
-  } = ctx
+  } = props
 
   return (
     <MolButtonArrowPair
-      displayTitle={monthHeader?.displayText ?? ''}
+      displayTitle={ monthHeader }
       displayTitleHandler={() => changeViewMode(ViewMode.Year)}
       isDoubleArrow={true}
       handler={{
@@ -38,15 +42,14 @@ export const MolMonthHeader: React.FC = () => {
   )
 }
 
-export const MolMonthBody: React.FC = () => {
-  const ctx = useTableContext()
-  if (!ctx) return <></>
+interface MolMonthBodyProp {
+  monthBody: CalendarBtn[][]
+}
 
-  const { monthBody } = ctx
+export const MolMonthBody: React.FC<MolMonthBodyProp> = (props) => {
+  const { monthBody: displayMonth } = props
 
-  if (monthBody == null) return <></>
-
-  const { displayMonth } = monthBody
+  if (displayMonth == null) return <></>
 
   return (
     <BasicTable>
@@ -81,21 +84,25 @@ export const MolMonthBody: React.FC = () => {
   )
 }
 
-const MolMonth: React.FC = () => {
+const MolMonth: React.FC<MolMonthHeaderProps & MolMonthBodyProp> = (props) => {
   return (
     <BasicTable>
     {{
       header: (
         <tr>
           <th>
-            <MolMonthHeader/>
+            <MolMonthHeader
+              { ...props }
+            />
           </th>
         </tr>
       ),
       body: (
         <tr>
           <td>
-            <MolMonthBody />
+            <MolMonthBody
+              { ...props }
+            />
         </td>
       </tr>
       )

@@ -1,29 +1,23 @@
-export interface DateBtn {
-  timestamp: number
-  date: Date
-  time: Time
+export interface CalendarBtn {
+  value: Date | number
   clickFn: () => void
+
+  text?: string | number
+
+  time?: Time
+  timestamp?: number
+
   mouseFn?: () => void
   isSelected?: boolean
 
   disabled?: boolean
-  isThisMonth: boolean
+  isThisMonth?: boolean
 
   isRangeHover?: boolean
   onMouseEnter?: (...arg: any[]) => void
 }
 
 // TODO 整合 BTN TYPE
-export interface MonthBtn {
-  value: number | string
-  text: string
-  clickFn?: () => void
-
-  disabled?: boolean
-
-  isSelected?: boolean
-}
-
 export interface Time {
   y: number
   m: number
@@ -48,7 +42,7 @@ export const enum Mode {
 }
 
 export const enum ViewMode {
-  Calendar = 1,
+  Day = 1,
   Month = 1 << 1,
   Year = 1 << 2,
   Decade = 1 << 3,
