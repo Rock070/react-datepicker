@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { useCalendar, CalendarContext, useTableContext } from '@/hooks/useCalendar'
-import { DateRangeContext } from '@/hooks/useDateRange'
+import { useCalendar, CalendarContext } from '@/hooks/useCalendar'
+import { useDateRange, DateRangeContext } from '@/hooks/useDateRange'
 
 import MolDay from '@/components/Molecules/MolDaysView'
 import MolMonth from '@/components/Molecules/MolMonthsView'
@@ -12,25 +12,28 @@ import { ViewMode, Mode } from '@/types'
 export interface CalendarProps {
   mode: Mode
   date: Date | Date[]
-  setDate: React.Dispatch<React.SetStateAction<Date>>
+  setDate: React.Dispatch<React.SetStateAction<Date | Date[]>>
   width?: number
 }
 // TODO: multiple
+
 const Calendar: React.FC<CalendarProps> = (props) => {
   const { date, setDate, width = 350, mode } = props
+  console.log(mode)
   const useFn = (function () {
     switch (mode) {
       case Mode.DateRange:
-        return useCalendar
+        return () => useDateRange(date[0])
       case Mode.DatePicker:
       default:
-        return useCalendar
+        return () => useCalendar(date)
     }
   }())
+  console.log(useFn())
   const {
     viewMode,
     ...rest
-  } = useFn(date)
+  } = useFn()
 
   const CalendarProviderContext = (function () {
     switch (mode) {

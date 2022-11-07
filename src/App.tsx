@@ -33,20 +33,20 @@ const App: React.FC = () => {
           <div>
             <div>Calendar</div>
             <div>{date.toLocaleDateString()}</div>
-            <OrgCalendar
+            {/* <OrgCalendar
               date={date}
               setDate={setDate}
               mode={Mode.DatePicker}
-            />
+            /> */}
             </div>
           <div>
             <div>RangeCalendar</div>
-            {/* <div>{rangeDate[0]?.toLocaleDateString()} - {rangeDate[1]?.toLocaleDateString()}</div> */}
-            {/* <OrgRangeCalendar
+            <div>{rangeDate[0]?.toLocaleDateString()} - {rangeDate[1]?.toLocaleDateString()}</div>
+            <OrgCalendar
               date={rangeDate}
               setDate={setRangeDate}
               mode={Mode.DateRange}
-            /> */}
+            />
           </div>
         </div>
       </div>

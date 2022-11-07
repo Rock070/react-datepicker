@@ -17,7 +17,8 @@ export const MolCalendarBody: React.FC = () => {
   const ctx = useTableContext()
   if (!ctx) return <></>
 
-  const { dayBody: calendarDisplay } = ctx
+  const { mode, dayBody: calendarDisplay } = ctx
+  console.log(mode, calendarDisplay)
 
   if (calendarDisplay == null) return <></>
 

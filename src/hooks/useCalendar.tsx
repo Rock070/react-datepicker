@@ -153,7 +153,6 @@ const _useMonthsBody = () => {
         text: m,
         clickFn: () => setDisplayMonth(index),
         disabled: false,
-        // isSelected: isSameYearMonth(date[0], new Date(y, item.value)) }
         isSelected: isSameYearMonth(date, new Date(y, index))
       }
     ))
