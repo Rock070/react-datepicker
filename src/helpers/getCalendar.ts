@@ -1,11 +1,8 @@
-import formatter from '@/utils/time/formatter'
-import splitGroup from '@/utils/splitGroup'
 import {
   get,
   getFirstDayOfMonth,
   getLastDayOfMonth,
   getHowManyDaysInThisMonth,
-  getTotalRowsNumInCalendar,
   getTimestamp,
   getFirstDayOfNextMonth,
   getLastDayOfLastMonth
@@ -13,9 +10,9 @@ import {
 
 import { DAYS_NUM_IN_ONE_ROW, DAY_MS } from '@/helpers/const'
 
-import type { DateBtn } from '@/types'
+import type { CalendarBtn } from '@/types'
 
-const getCalendar = (date: Date): DateBtn[] => {
+const getCalendar = (date: Date): CalendarBtn[] => {
   const { y, m } = get(date)
   const firstDayOfMonth = getFirstDayOfMonth(date)
   const lastDayOfMonth = getLastDayOfMonth(date)
@@ -25,9 +22,8 @@ const getCalendar = (date: Date): DateBtn[] => {
   const lastMonthDays = firstDayOfMonthDay
   const nextMonthDays = DAYS_NUM_IN_ONE_ROW - lastDayOfMonthDay - 1
   const daysNumInThisMonth = getHowManyDaysInThisMonth(date)
-  const rowsNum = getTotalRowsNumInCalendar(date)
 
-  const result: DateBtn[] = []
+  const result: CalendarBtn[] = []
   /**
    * 當月
    */
@@ -36,7 +32,7 @@ const getCalendar = (date: Date): DateBtn[] => {
     result.push({
       timestamp: getTimestamp(targetDate),
       time: get(targetDate),
-      date: targetDate,
+      value: targetDate,
       clickFn: () => {},
       disabled: false,
       isSelected: false,
@@ -54,7 +50,7 @@ const getCalendar = (date: Date): DateBtn[] => {
 
     result.unshift({
       timestamp,
-      date: targetDate,
+      value: targetDate,
       time: get(targetDate),
       clickFn: () => {},
       disabled: false,
@@ -72,7 +68,7 @@ const getCalendar = (date: Date): DateBtn[] => {
     const targetDate = new Date(timestamp)
 
     result.push({
-      date: targetDate,
+      value: targetDate,
       timestamp,
       time: get(targetDate),
       clickFn: () => {},
