@@ -21,6 +21,8 @@ module.exports = {
     'no-console': ['warn', {
       allow: ['warn', 'error', 'debug', 'assert']
     }],
+    'arrow-parens': ['error', 'as-needed'],
+    eqeqeq: 'off',
     'no-unused-vars': 'warn',
     '@typescript-eslint/no-unused-vars': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',
