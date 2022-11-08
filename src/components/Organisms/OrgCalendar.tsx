@@ -7,27 +7,35 @@ import MolMonth from '@/components/Molecules/MolMonthsView'
 import MolYear from '@/components/Molecules/MolYearsView'
 import MolDecade from '@/components/Molecules/MolDecadesView'
 
+import { isArray } from '@/utils/is'
+
 import { ViewMode, Mode } from '@/types'
 
 export interface CalendarProps {
   mode: Mode
   date: Date | Date[]
-  setDate: React.Dispatch<React.SetStateAction<Date | Date[]>>
+  setDate: React.Dispatch<React.SetStateAction<Date>> | React.Dispatch<React.SetStateAction<Date[]>>
   width?: number
 }
 // TODO: multiple
 
 const Calendar: React.FC<CalendarProps> = props => {
   const { date, setDate, width = 350, mode } = props
+  if ((mode & Mode.DateRange) && !isArray(date)) {
+    console.error('Date need to be array type')
+    return <></>
+  }
+
   const useFn = (function () {
     switch (mode) {
       case Mode.DateRange:
-        return () => useDateRange(date, setDate)
+        return () => useDateRange((date as Date[]), (setDate as (date: Date[]) => any))
       case Mode.DatePicker:
       default:
-        return () => useCalendar(date, setDate)
+        return () => useCalendar((date as Date), (setDate as (date: Date) => any))
     }
   }())
+
   const {
     viewMode,
     ...rest
@@ -58,10 +66,6 @@ const Calendar: React.FC<CalendarProps> = props => {
         '
       >
         <DisplayView
-          date={date}
-          setDate={setDate}
-          viewMode={viewMode}
-          mode={mode}
           { ...rest }
         />
       </div>

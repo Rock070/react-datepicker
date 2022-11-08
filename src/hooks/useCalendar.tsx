@@ -45,21 +45,22 @@ export const useCalendar = (
 
     const calendarDisplay = useMemo<CalendarBtn[][]>(() => {
       const result = getCalendar(displayDate).map(item => {
+        const value = item.value as Date
         const isSelected = (function () {
-          return isSameTimestamp(item.value, date)
+          return isSameTimestamp(value, date)
         }())
 
         return {
           ...item,
           clickFn: () => {
-            setDisplayDate(item.value)
-            setDate(item.value)
+            setDisplayDate(value)
+            setDate(value)
           },
           onMouseEnter: () => {
           // TODO: 可以優化成用 css hover + not:hover + tailwind group
-            setHoverDate(item.value)
+            setHoverDate(value)
           },
-          isRangeHover: isRangeHoverHandler(item.value),
+          isRangeHover: isRangeHoverHandler(value),
           isSelected
         }
       })
