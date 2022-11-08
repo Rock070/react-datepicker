@@ -6,15 +6,13 @@ import { ViewMode, CalendarBtn } from '@/types'
 import { get } from '@/utils/time/get'
 import getDecade from '@/utils/time/getDecade'
 import isSameTimestamp from '@/utils/time/isSameTimestamp'
-import isSameYear from '@/utils/time/isSameYear'
-import isSameDecade from '@/utils/time/isSameDecade'
 import getCentury from '@/utils/time/getCentury'
 
 import splitGroup from '@/utils/splitGroup'
+import inRange from '@/utils/inRange'
 import pipe from '@/utils/pipe'
 
 import getCalendar from '@/helpers/getCalendar'
-import isSameYearMonth from '@/helpers/isSameYearMonth'
 
 export const useDateRange = (
   date: Date[],
@@ -39,27 +37,30 @@ export const useDateRange = (
 
     const calendarDisplay = useMemo<CalendarBtn[][]>(() => {
       const result = getCalendar(displayDate).map(item => {
+        const value = item.value as Date
         const isSelected = (function () {
-          if (date[0] === undefined) return false
-          if (isChoosingDateRange) return isSameTimestamp(item.value, date[0])
-          return date[0] <= item.value && item.value <= date[1]
+          const [date1, date2] = date
+          if (date1 === undefined) return false
+          if (isChoosingDateRange) return isSameTimestamp(value, date1)
+
+          return inRange(value, date1, date2)
         }())
 
         return {
           ...item,
           clickFn: () => {
-            setDisplayDate(item.value)
+            setDisplayDate(value)
             if (isChoosingDateRange) {
-              if (item.value < date[0]) setDate([item.value, ...date])
+              if (value < date[0]) setDate([value, ...date])
 
-              else setDate([...date, item.value])
-            } else setDate([item.value])
+              else setDate([...date, value])
+            } else setDate([value])
           },
           onMouseEnter: () => {
             // TODO: 可以優化成用 css hover + not:hover + tailwind group
-            setHoverDate(item.value)
+            setHoverDate(value)
           },
-          isRangeHover: isRangeHoverHandler(item.value),
+          isRangeHover: isRangeHoverHandler(value),
           isSelected
         }
       })
@@ -99,13 +100,19 @@ export const useDateRange = (
     }
 
     const transformMonth = (months: string[]): CalendarBtn[] => {
+      const getIsSelected = (month: number) => {
+        const [date1, date2] = date
+
+        const target = new Date(y, month)
+        return inRange(target, date1, date2)
+      }
       return months.map((m, index) => (
         {
           value: index,
           text: m,
           clickFn: () => setDisplayMonth(index),
           disabled: false,
-          isSelected: isSameYearMonth(date[0], new Date(y, index))
+          isSelected: getIsSelected(index)
         }
       ))
     }
@@ -138,6 +145,13 @@ export const useDateRange = (
       changeViewMode(ViewMode.Month)
     }
 
+    const getIsSelected = (year: number) => {
+      const [date1, date2] = date
+
+      const target = new Date(year, 1)
+      return inRange(target, date1, date2)
+    }
+
     const transformYear = (months: number[]): CalendarBtn[] => {
       return months.map((y, index) => (
         {
@@ -145,7 +159,7 @@ export const useDateRange = (
           text: String(y),
           clickFn: () => setDisplayYear(y),
           disabled: false,
-          isSelected: isSameYear(date[0], new Date(y, 1))
+          isSelected: getIsSelected(y)
         }
       ))
     }
@@ -185,15 +199,13 @@ export const useDateRange = (
     }
 
     const getIsSelected = (itemDate: Date) => {
-      if (!Array.isArray(date)) return isSameDecade(date, itemDate)
+      const [date1, date2] = date
 
-      if (date[0] === undefined) return false
-      if (date[1] === undefined) return isSameDecade(date[0], itemDate)
-      return date[0] <= itemDate && itemDate <= date[1]
+      return inRange(itemDate, date1, date2)
     }
 
-    const transformDecade = (months: typeof decades): CalendarBtn[] => {
-      return months.map((item, index) => (
+    const transformDecade = (decade: typeof decades): CalendarBtn[] => {
+      return decade.map(item => (
         {
           ...item,
           clickFn: () => setDisplayDecade(item.value),

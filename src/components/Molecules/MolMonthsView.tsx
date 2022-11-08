@@ -19,7 +19,7 @@ interface MolMonthHeaderProps {
   changeViewMode: (mode: ViewMode) => void
 }
 
-export const MolMonthHeader: React.FC<MolMonthHeaderProps> = (props) => {
+export const MolMonthHeader: React.FC<MolMonthHeaderProps> = props => {
   const {
     displayDate,
     changeViewMode,
@@ -46,7 +46,7 @@ interface MolMonthBodyProp {
   monthBody: CalendarBtn[][]
 }
 
-export const MolMonthBody: React.FC<MolMonthBodyProp> = (props) => {
+export const MolMonthBody: React.FC<MolMonthBodyProp> = props => {
   const { monthBody: displayMonth } = props
 
   if (displayMonth == null) return <></>
@@ -84,7 +84,7 @@ export const MolMonthBody: React.FC<MolMonthBodyProp> = (props) => {
   )
 }
 
-const MolMonth: React.FC<MolMonthHeaderProps & MolMonthBodyProp> = (props) => {
+const MolMonth: React.FC<MolMonthHeaderProps & MolMonthBodyProp> = props => {
   return (
     <BasicTable>
     {{

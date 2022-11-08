@@ -1,9 +1,6 @@
 import React, { useState } from 'react'
 import reactLogo from './assets/react.svg'
-// import Calendar from '@/components/Organisms/OrgCalendar'
 import OrgCalendar from '@/components/Organisms/OrgCalendar'
-
-import OrgRangeCalendar from '@/components/Organisms/OrgRangeCalendar'
 
 import { Mode } from '@/types'
 

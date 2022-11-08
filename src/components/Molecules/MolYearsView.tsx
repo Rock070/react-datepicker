@@ -20,7 +20,7 @@ interface MolYearHeaderProps {
   changeViewMode: (mode: ViewMode) => void
 }
 
-export const MolYearHeader: React.FC<MolYearHeaderProps> = (props) => {
+export const MolYearHeader: React.FC<MolYearHeaderProps> = props => {
   const {
     displayDate,
     changeViewMode,
@@ -47,7 +47,7 @@ interface MolYearBodyProp {
   yearBody: CalendarBtn[][]
 }
 
-export const MolYearBody: React.FC<MolYearBodyProp> = (props) => {
+export const MolYearBody: React.FC<MolYearBodyProp> = props => {
   const { yearBody: displayYear } = props
 
   if (displayYear == null) return <></>
@@ -86,7 +86,7 @@ export const MolYearBody: React.FC<MolYearBodyProp> = (props) => {
   )
 }
 
-const MolYear: React.FC<MolYearHeaderProps & MolYearBodyProp> = (props) => {
+const MolYear: React.FC<MolYearHeaderProps & MolYearBodyProp> = props => {
   return (
     <BasicTable>
       {{

@@ -1,11 +1,8 @@
-import formatter from '@/utils/time/formatter'
-import splitGroup from '@/utils/splitGroup'
 import {
   get,
   getFirstDayOfMonth,
   getLastDayOfMonth,
   getHowManyDaysInThisMonth,
-  getTotalRowsNumInCalendar,
   getTimestamp,
   getFirstDayOfNextMonth,
   getLastDayOfLastMonth
@@ -25,7 +22,6 @@ const getCalendar = (date: Date): CalendarBtn[] => {
   const lastMonthDays = firstDayOfMonthDay
   const nextMonthDays = DAYS_NUM_IN_ONE_ROW - lastDayOfMonthDay - 1
   const daysNumInThisMonth = getHowManyDaysInThisMonth(date)
-  const rowsNum = getTotalRowsNumInCalendar(date)
 
   const result: CalendarBtn[] = []
   /**

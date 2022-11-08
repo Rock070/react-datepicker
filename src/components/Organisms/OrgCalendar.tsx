@@ -17,7 +17,7 @@ export interface CalendarProps {
 }
 // TODO: multiple
 
-const Calendar: React.FC<CalendarProps> = (props) => {
+const Calendar: React.FC<CalendarProps> = props => {
   const { date, setDate, width = 350, mode } = props
   const useFn = (function () {
     switch (mode) {

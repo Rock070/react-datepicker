@@ -19,7 +19,7 @@ interface Props {
   }
 }
 
-const MolButtonArrowPair: React.FC<Props> = (props) => {
+const MolButtonArrowPair: React.FC<Props> = props => {
   const { isDoubleArrow, handler, displayTitle, displayTitleHandler, titleDisabled } = props
 
   return (

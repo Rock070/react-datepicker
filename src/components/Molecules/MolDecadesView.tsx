@@ -19,7 +19,7 @@ interface MolDecadeHeaderProps {
   setDisplayDate: (date: Date) => void
 }
 
-export const MolDecadeHeader: React.FC<MolDecadeHeaderProps> = (props) => {
+export const MolDecadeHeader: React.FC<MolDecadeHeaderProps> = props => {
   const {
     displayDate,
     setDisplayDate,
@@ -41,7 +41,7 @@ interface MolDecadeBodyProp {
   decadeBody: CalendarBtn[][]
 }
 
-export const MolDecadeBody: React.FC<MolDecadeBodyProp> = (props) => {
+export const MolDecadeBody: React.FC<MolDecadeBodyProp> = props => {
   const { decadeBody: displayDecade } = props
 
   if (displayDecade == null) return <></>
@@ -78,7 +78,7 @@ export const MolDecadeBody: React.FC<MolDecadeBodyProp> = (props) => {
   )
 }
 
-const MolDecade: React.FC<MolDecadeHeaderProps & MolDecadeBodyProp> = (props) => {
+const MolDecade: React.FC<MolDecadeHeaderProps & MolDecadeBodyProp> = props => {
   return (
     <BasicTable>
       {{

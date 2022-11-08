@@ -1,5 +1,3 @@
-const { off } = require('process')
-
 module.exports = {
   env: {
     browser: true,
@@ -23,6 +21,7 @@ module.exports = {
     'no-console': ['warn', {
       allow: ['warn', 'error', 'debug', 'assert']
     }],
+    'arrow-parens': ['error', 'as-needed'],
     eqeqeq: 'off',
     'no-unused-vars': 'warn',
     '@typescript-eslint/no-unused-vars': 'off',

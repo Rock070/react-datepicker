@@ -19,7 +19,7 @@ interface MolDayHeaderProps {
   changeViewMode: (mode: ViewMode) => void
 }
 
-export const MolDayHeader: React.FC<MolDayHeaderProps> = (props) => {
+export const MolDayHeader: React.FC<MolDayHeaderProps> = props => {
   const {
     displayDate,
     changeViewMode,
@@ -46,7 +46,7 @@ interface MolDayBodyProps {
   dayBody: CalendarBtn[][]
 }
 
-export const MolDayBody: React.FC<MolDayBodyProps> = (props) => {
+export const MolDayBody: React.FC<MolDayBodyProps> = props => {
   const { dayBody: calendarDisplay } = props
 
   if (calendarDisplay == null) return <></>
@@ -88,7 +88,7 @@ export const MolDayBody: React.FC<MolDayBodyProps> = (props) => {
   )
 }
 
-const MolDay: React.FC<MolDayBodyProps & MolDayHeaderProps> = (props) => {
+const MolDay: React.FC<MolDayBodyProps & MolDayHeaderProps> = props => {
   return (
     <BasicTable>
       {{
