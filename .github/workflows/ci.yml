@@ -69,7 +69,7 @@ jobs:
         run: pnpm install
 
       - name: Type Checking
-        run: pnpm tsc
+        run: pnpm tsc --noEmit
 
   Build:
     runs-on: ubuntu-latest

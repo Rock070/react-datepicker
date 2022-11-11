@@ -53,10 +53,10 @@ export const MolMonthBody: React.FC<MolMonthBodyProp> = props => {
 
   return (
     <BasicTable>
-    {{
-      body: (
-        <>
-          {
+      {{
+        body: (
+          <>
+            {
             displayMonth.map((group, index) => (
               <tr key={index}>
                 {
@@ -77,9 +77,9 @@ export const MolMonthBody: React.FC<MolMonthBodyProp> = props => {
               </tr>
             ))
           }
-        </>
-      )
-    }}
+          </>
+        )
+      }}
     </BasicTable>
   )
 }
@@ -87,26 +87,26 @@ export const MolMonthBody: React.FC<MolMonthBodyProp> = props => {
 const MolMonth: React.FC<MolMonthHeaderProps & MolMonthBodyProp> = props => {
   return (
     <BasicTable>
-    {{
-      header: (
-        <tr>
-          <th>
-            <MolMonthHeader
+      {{
+        header: (
+          <tr>
+            <th>
+              <MolMonthHeader
               { ...props }
             />
-          </th>
-        </tr>
-      ),
-      body: (
-        <tr>
-          <td>
-            <MolMonthBody
+            </th>
+          </tr>
+        ),
+        body: (
+          <tr>
+            <td>
+              <MolMonthBody
               { ...props }
             />
-        </td>
-      </tr>
-      )
-    }}
+            </td>
+          </tr>
+        )
+      }}
     </BasicTable>
   )
 }

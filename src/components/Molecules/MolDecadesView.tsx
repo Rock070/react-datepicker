@@ -48,12 +48,12 @@ export const MolDecadeBody: React.FC<MolDecadeBodyProp> = props => {
 
   return (
     <BasicTable>
-    {{
-      body:
-        <>
-          { displayDecade.map((group, index) => (
-            <tr key={index}>
-              {
+      {{
+        body:
+  <>
+    { displayDecade.map((group, index) => (
+      <tr key={index}>
+        {
                 group.map((item, id) => (
                   <td key={id}>
                     <BasicButton
@@ -70,11 +70,11 @@ export const MolDecadeBody: React.FC<MolDecadeBodyProp> = props => {
                   </td>
                 ))
               }
-            </tr>
-          ))}
-        </>
-    }}
-  </BasicTable>
+      </tr>
+    ))}
+  </>
+      }}
+    </BasicTable>
   )
 }
 
@@ -83,23 +83,23 @@ const MolDecade: React.FC<MolDecadeHeaderProps & MolDecadeBodyProp> = props => {
     <BasicTable>
       {{
         header:
-          <tr>
-            <th>
-              <MolDecadeHeader
+  <tr>
+    <th>
+      <MolDecadeHeader
                 { ...props }
               />
-            </th>
-          </tr>,
+    </th>
+  </tr>,
         body:
-          <tr>
-            <td>
-              <MolDecadeBody
+  <tr>
+    <td>
+      <MolDecadeBody
                 { ...props }
               />
-            </td>
-          </tr>
+    </td>
+  </tr>
       }}
-  </BasicTable>
+    </BasicTable>
   )
 }
 

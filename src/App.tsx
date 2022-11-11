@@ -5,12 +5,8 @@ import OrgCalendar from '@/components/Organisms/OrgCalendar'
 import { Mode } from '@/types'
 
 const App: React.FC = () => {
-  const [mode, changeMode] = useState<Mode>(Mode.DateRange)
-  const onChangeMode = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = event.target.value as unknown as Mode
-    changeMode(value)
-  }
   const [date, setDate] = useState(new Date())
+  const [multipleDate, setMultipleDate] = useState([new Date()])
   const [rangeDate, setRangeDate] = useState([new Date(), new Date()])
 
   return (
@@ -18,15 +14,7 @@ const App: React.FC = () => {
       <div className='flex flex-col items-center space-y-5 h-full pt-20'>
         <img src={reactLogo} alt="logo" />
 
-        <h2>mode: {mode}</h2>
-        <select
-          onChange={onChangeMode}
-          value={mode}
-        >
-          <option value={Mode.DatePicker}>DatePicker</option>
-          <option value={Mode.DateRange}>DateRange</option>
-        </select>
-        <div className="flex space-x-10 text-center">
+        <div className="grid grid-cols-2 gap-10 text-center">
           <div>
             <div>Calendar</div>
             <div>{date.toLocaleDateString()}</div>
@@ -35,7 +23,22 @@ const App: React.FC = () => {
               setDate={setDate}
               mode={Mode.DatePicker}
             />
+          </div>
+          <div>
+            <div>Calendar Multiple</div>
+            <div className="space-x-1 break-all max-w-350px">
+              {
+              multipleDate.map((item, index) => {
+                return <span key={item.toLocaleDateString()}>{ index !== 0 && ','} {item.toLocaleDateString()}</span>
+              })
+            }
             </div>
+            <OrgCalendar
+              date={multipleDate}
+              setDate={setMultipleDate}
+              mode={Mode.DatePickerMultiple}
+            />
+          </div>
           <div>
             <div>RangeCalendar</div>
             <div>{rangeDate[0]?.toLocaleDateString()} - {rangeDate[1]?.toLocaleDateString()}</div>
