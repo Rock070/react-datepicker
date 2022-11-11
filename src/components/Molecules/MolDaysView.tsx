@@ -57,8 +57,8 @@ export const MolDayBody: React.FC<MolDayBodyProps> = props => {
         header: <tr>{ CALENDER_HEADER.map(item => <th key={item} className="p-1 m-1" >{ item }</th>) }</tr>,
         body: <>
           { calendarDisplay.map((group, index) =>
-           <tr key={index} >
-             {
+            <tr key={index} >
+              {
                group.map(item =>
                  <td
                    key={ item.timestamp }
@@ -80,11 +80,11 @@ export const MolDayBody: React.FC<MolDayBodyProps> = props => {
                  </td>
                )
              }
-           </tr>
+            </tr>
           )}
         </>
       }}
-  </BasicTable>
+    </BasicTable>
   )
 }
 

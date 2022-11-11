@@ -1,6 +1,7 @@
 import React from 'react'
 import { useCalendar } from '@/hooks/useCalendar'
 import { useDateRange } from '@/hooks/useDateRange'
+import { useCalendarMultiple } from '@/hooks/useCalendarMultiple'
 
 import MolDay from '@/components/Molecules/MolDaysView'
 import MolMonth from '@/components/Molecules/MolMonthsView'
@@ -17,7 +18,6 @@ export interface CalendarProps {
   setDate: React.Dispatch<React.SetStateAction<Date>> | React.Dispatch<React.SetStateAction<Date[]>>
   width?: number
 }
-// TODO: multiple
 
 const Calendar: React.FC<CalendarProps> = props => {
   const { date, setDate, width = 350, mode } = props
@@ -30,6 +30,8 @@ const Calendar: React.FC<CalendarProps> = props => {
     switch (mode) {
       case Mode.DateRange:
         return () => useDateRange((date as Date[]), (setDate as (date: Date[]) => any))
+      case Mode.DatePickerMultiple:
+        return () => useCalendarMultiple((date as Date[]), (setDate as (date: Date[]) => any))
       case Mode.DatePicker:
       default:
         return () => useCalendar((date as Date), (setDate as (date: Date) => any))

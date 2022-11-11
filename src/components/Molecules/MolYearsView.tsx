@@ -56,8 +56,8 @@ export const MolYearBody: React.FC<MolYearBodyProp> = props => {
     <BasicTable>
       {{
         body:
-          <>
-            {
+  <>
+    {
               displayYear.map((group, index) => (
                 <tr key={index}>
                   {
@@ -80,7 +80,7 @@ export const MolYearBody: React.FC<MolYearBodyProp> = props => {
                 </tr>
               ))
             }
-          </>
+  </>
       }}
     </BasicTable>
   )
