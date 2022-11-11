@@ -3,10 +3,6 @@ run-name: ${{ github.job }} commit ${{ github.sha }} is running GitHub Actions ð
 
 
 on:
-  push:
-    branches:
-      - develop
-
   pull_request:
     branches:
       - develop
