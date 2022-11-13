@@ -14,13 +14,13 @@ on:
 
 
 jobs:
-  Set_Output:
+  set-output:
     runs-on: ubuntu-latest
     steps:
       - name: Add SHORT_SHA env property with commit short sha
         run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
 
-  Lint:
+  lint:
     runs-on: ubuntu-latest
     steps:
       - name: Check out to my repo
@@ -48,7 +48,7 @@ jobs:
 
       - name: Build
         run: pnpm vite build
-  Type_Check:
+  type-check:
     runs-on: ubuntu-latest
     steps:
       - name: Check out to my repo
@@ -70,6 +70,29 @@ jobs:
 
       - name: Type Checking
         run: pnpm tsc --noEmit
+
+  Test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out to my repo
+        uses: actions/checkout@v3
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 7.2.1
+
+      - name: Set node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.16
+          cache: pnpm
+
+      - name: Setup
+        run: pnpm install
+
+      - name: Test
+        run: pnpm test:run
 
   Build:
     runs-on: ubuntu-latest
