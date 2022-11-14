@@ -28,6 +28,7 @@ module.exports = {
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/triple-slash-reference': 'off',
     '@typescript-eslint/strict-boolean-expressions': 'off',
+    '@typescript-eslint/promise-function-async': 'off',
     'react/jsx-indent': [2, 2]
   }
 }
