@@ -1,7 +1,10 @@
 {
   "compilerOptions": {
-    "types": ["cypress"],
     "jsx": "react-jsx",
+    "target": "es5",
+    "isolatedModules": true,
+    "lib": ["es5", "dom"],
+    "types": ["cypress", "node"]
   },
-  "include": ["**/*.*", "../src/components/calendar.cy.ts", "../src/components/calendar.cy.ts"]
+  "include": ["**/*.ts", "../src/components/calendar.cy.ts", "../src/components/calendar.cy.ts"]
 }
