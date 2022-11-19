@@ -1,0 +1,7 @@
+{
+  "compilerOptions": {
+    "types": ["cypress"],
+    "jsx": "react-jsx",
+  },
+  "include": ["**/*.*", "../src/components/calendar.cy.ts", "../src/components/calendar.cy.ts"]
+}
