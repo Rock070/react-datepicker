@@ -3,3 +3,5 @@ describe('Home Page', () => {
     cy.visit('/')
   })
 })
+
+export default 2

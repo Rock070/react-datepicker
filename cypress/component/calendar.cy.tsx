@@ -5,17 +5,20 @@ import 'virtual:uno.css'
 
 import React from 'react'
 
-import Stepper from '../../src/components/Stepper'
-import OrgCalendar from '../../src/components/Organisms/OrgCalendar'
+import Datepicker from './datepicker'
 
-// describe('<Stepper>', () => {
-//   it('mounts', () => {
-//     cy.mount(<Stepper />)
-//   })
-// })
-
-describe('<OrgCalendar>', () => {
+describe('<datepicker>', () => {
   it('mounts', () => {
-    cy.mount(<OrgCalendar />)
+    cy.mount(<Datepicker />)
+    cy.get('span').should('have.text', '0')
   })
 })
+
+/**
+ * Hover 正常顯示「顏色」
+ * 點擊日期可以正常顯示「顏色」
+ * 點擊切換月份正常顯示月份
+ * 點擊切換年份正常顯示年份
+ * 點擊切換十年份正常顯示十年份
+ * 點擊切換百年份正常顯示百年份
+ */

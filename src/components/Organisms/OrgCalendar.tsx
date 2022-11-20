@@ -22,7 +22,6 @@ export interface CalendarProps {
 
 const Calendar: React.FC<CalendarProps> = props => {
   const { date, setDate, width = 350, mode = Mode.DatePicker } = props
-  consola.log(date, setDate, width, mode)
   if (date == undefined) {
     consola.error('date is undefined, it has to be value as Date type with default mode or Date[] type with multiple, range mode')
     return <></>
