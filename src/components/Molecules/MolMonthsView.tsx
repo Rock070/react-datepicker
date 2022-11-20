@@ -65,8 +65,8 @@ export const MolMonthBody: React.FC<MolMonthBodyProp> = props => {
                       <BasicButton
                         onClick={item.clickFn}
                         className={cx(
-                          'w-full py-3 text-center',
-                          { 'bg-blue hover:bg-blue': item.isSelected }
+                          'mochi-w-full mochi-py-3 mochi-text-center',
+                          { 'mochi-bg-blue mochi-hover:bg-blue': item.isSelected }
                         )}
                       >
                         { item.text }

@@ -8,7 +8,13 @@ import { resolve } from 'path'
 export default defineConfig({
   plugins: [
     react(),
-    Unocss()
+    Unocss({
+      preprocess (matcher) {
+        return matcher.startsWith('mochi-')
+          ? matcher.slice(6)
+          : undefined // ignore
+      }
+    })
   ],
   resolve: {
     alias: {

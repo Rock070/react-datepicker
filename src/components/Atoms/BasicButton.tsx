@@ -21,11 +21,11 @@ const BasicButton: React.FC<Props> = ({
       type={type}
       onClick={onClick}
       className={cx(
-        'py-0.5 px-1 rounded-sm',
+        'mochi-py-0.5 mochi-px-1 mochi-rounded-sm',
         className,
         {
-          'cursor-not-allowed pointer-events-none bg-gray-3': disabled,
-          'hover:bg-gray-2': !disabled
+          'mochi-cursor-not-allowed mochi-pointer-events-none mochi-bg-gray-3': disabled,
+          'mochi-hover:bg-gray-2': !disabled
         }
       )}
     >

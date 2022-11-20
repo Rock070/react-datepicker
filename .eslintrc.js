@@ -29,6 +29,9 @@ module.exports = {
     '@typescript-eslint/triple-slash-reference': 'off',
     '@typescript-eslint/strict-boolean-expressions': 'off',
     '@typescript-eslint/promise-function-async': 'off',
-    'react/jsx-indent': [2, 2]
+    'react/jsx-indent': [2, 2, {
+      checkAttributes: true,
+      indentLogicalExpressions: true
+    }]
   }
 }

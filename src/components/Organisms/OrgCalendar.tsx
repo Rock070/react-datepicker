@@ -72,13 +72,12 @@ const Calendar: React.FC<CalendarProps> = props => {
   }())
 
   return (
-    <div className="space-y-6">
-      <div/>
+    <div className="mochi-calendar mochi-space-y-6">
       <div
         style={{ width: `${width}px` }}
         className='
-          text-sm bg-blend-soft-light
-          shadow-sm shadow-gray
+          mochi-text-sm mochi-bg-blend-soft-light
+          mochi-shadow-sm mochi-shadow-gray
         '
       >
         <DisplayView

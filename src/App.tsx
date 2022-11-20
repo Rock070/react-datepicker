@@ -10,11 +10,11 @@ const App: React.FC = () => {
   const [rangeDate, setRangeDate] = useState([new Date(), new Date()])
 
   return (
-    <div className="w-screen h-screen flex justify-center items-center">
-      <div className='flex flex-col items-center space-y-5 h-full pt-20'>
+    <div className="mochi-w-screen mochi-h-screen mochi-flex mochi-justify-center mochi-items-center">
+      <div className='mochi-flex mochi-flex-col mochi-items-center mochi-space-y-5 mochi-h-full mochi-pt-20'>
         <img src={reactLogo} alt="logo" />
 
-        <div className="grid grid-cols-2 gap-10 text-center">
+        <div className="mochi-grid mochi-grid-cols-2 mochi-gap-10 mochi-text-center">
           <div>
             <div>Calendar</div>
             <div>{date.toLocaleDateString()}</div>
