@@ -59,9 +59,9 @@ export const MolDecadeBody: React.FC<MolDecadeBodyProp> = props => {
                     <BasicButton
                       onClick={item.clickFn}
                       className={cx(
-                        'w-full px-3 py-3 text-center',
+                        'mochi-w-full mochi-px-3 mochi-py-3 mochi-text-center',
                         {
-                          'bg-blue hover:bg-blue': item.isSelected
+                          'mochi-bg-blue mochi-hover:bg-blue': item.isSelected
                         }
                       )}
                     >
@@ -86,16 +86,16 @@ const MolDecade: React.FC<MolDecadeHeaderProps & MolDecadeBodyProp> = props => {
   <tr>
     <th>
       <MolDecadeHeader
-                { ...props }
-              />
+                      { ...props }
+                    />
     </th>
   </tr>,
         body:
   <tr>
     <td>
       <MolDecadeBody
-                { ...props }
-              />
+                      { ...props }
+                    />
     </td>
   </tr>
       }}
