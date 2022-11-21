@@ -6,6 +6,7 @@ import { ViewMode, CalendarBtn } from '@/types'
 import { get } from '@/utils/time/get'
 import getDecade from '@/utils/time/getDecade'
 import isSameTimestamp from '@/utils/time/isSameTimestamp'
+import isSameDate from '@/utils/time/isSameDate'
 import isSameYear from '@/utils/time/isSameYear'
 import isSameDecade from '@/utils/time/isSameDecade'
 import getCentury from '@/utils/time/getCentury'
@@ -46,9 +47,7 @@ export const useCalendar = (
     const calendarDisplay = useMemo<CalendarBtn[][]>(() => {
       const result = getCalendar(displayDate).map(item => {
         const value = item.value as Date
-        const isSelected = (function () {
-          return isSameTimestamp(value, date)
-        }())
+        const isSelected = isSameDate(value, date)
 
         return {
           ...item,
