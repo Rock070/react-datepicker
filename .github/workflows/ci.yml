@@ -39,11 +39,6 @@ jobs:
       - name: Lint
         run: pnpm lint:js
 
-      - name: Type Checking
-        run: pnpm tsc
-
-      - name: Build
-        run: pnpm vite build
   type-check:
     runs-on: ubuntu-latest
     steps:
