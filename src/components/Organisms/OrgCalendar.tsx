@@ -8,7 +8,6 @@ import MolDay from '@/components/Molecules/MolDaysView'
 import MolMonth from '@/components/Molecules/MolMonthsView'
 import MolYear from '@/components/Molecules/MolYearsView'
 import MolDecade from '@/components/Molecules/MolDecadesView'
-
 import { isArray } from '@/utils/is'
 
 import { ViewMode, Mode } from '@/types'
@@ -71,7 +70,7 @@ const Calendar: React.FC<CalendarProps> = props => {
   }())
 
   return (
-    <div className="mochi-calendar mochi-space-y-6">
+    <div data-cy="mochi-calendar" className="mochi-space-y-6">
       <div
         style={{ width: `${width}px` }}
         className='

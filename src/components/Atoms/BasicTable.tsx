@@ -10,10 +10,10 @@ interface Props {
 const basicTable: React.FC<Props> = ({ children }) => {
   return (
     <table width="100%" cellPadding="0">
-      <thead className="mochi-table-header">
+      <thead data-cy="mochi-table-header">
         { children.header }
       </thead>
-      <tbody className="mochi-table-body">
+      <tbody data-cy="mochi-table-body">
         { children.body }
       </tbody>
     </table>

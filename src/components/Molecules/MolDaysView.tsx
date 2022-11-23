@@ -64,6 +64,7 @@ export const MolDayBody: React.FC<MolDayBodyProps> = props => {
                     key={ item.timestamp }
                     onClick={item.clickFn}
                     onMouseEnter={item.onMouseEnter}
+                    data-cy="mochi-calendar-date"
                     className={cx(
                       'mochi-p-1 mochi-text-center mochi-cursor-pointer mochi-select-none',
                       {
