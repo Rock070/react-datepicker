@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import OrgCalendar from '@/components/Organisms/OrgCalendar'
+import 'virtual:unocss-devtools'
+import 'virtual:uno.css'
 
 import { Mode } from '@/types'
 
@@ -7,8 +9,8 @@ const Datepicker: React.FC = () => {
   const [date, setDate] = useState(new Date())
 
   return (
-    <div className="w-screen h-screen flex justify-center items-center">
-      <div className='flex flex-col items-center space-y-5 h-full pt-20 text-center'>
+    <div className="mochi-w-screen mochi-h-screen mochi-flex mochi-justify-center mochi-items-center">
+      <div className='mochi-flex mochi-flex-col mochi-items-center mochi-space-y-5 mochi-h-full mochi-pt-20 mochi-text-center'>
         <img src='/vite.svg' alt="logo" />
 
         <div>
