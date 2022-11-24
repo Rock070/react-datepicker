@@ -63,6 +63,7 @@ export const MolMonthBody: React.FC<MolMonthBodyProp> = props => {
                   group.map((item, id) => (
                     <td key={id}>
                       <BasicButton
+                        dataCy="mochi-calendar-month-btn"
                         onClick={item.clickFn}
                         className={cx(
                           'mochi-w-full mochi-py-3 mochi-text-center',

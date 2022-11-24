@@ -32,6 +32,7 @@ module.exports = {
     'react/jsx-indent': [2, 2, {
       checkAttributes: true,
       indentLogicalExpressions: true
-    }]
+    }],
+    '@typescript-eslint/no-namespace': 'off'
   }
 }
