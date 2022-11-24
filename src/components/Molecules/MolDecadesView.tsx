@@ -57,6 +57,7 @@ export const MolDecadeBody: React.FC<MolDecadeBodyProp> = props => {
                 group.map((item, id) => (
                   <td key={id}>
                     <BasicButton
+                      dataCy="mochi-calendar-decade-btn"
                       onClick={item.clickFn}
                       className={cx(
                         'mochi-w-full mochi-px-3 mochi-py-3 mochi-text-center',
