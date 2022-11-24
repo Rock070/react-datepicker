@@ -33,6 +33,6 @@ module.exports = {
       checkAttributes: true,
       indentLogicalExpressions: true
     }],
-    '@typescript-eslint/no-namespace': 'off',
+    '@typescript-eslint/no-namespace': 'off'
   }
 }
