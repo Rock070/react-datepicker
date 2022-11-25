@@ -1,6 +1,6 @@
 export interface CalendarBtn {
   value: Date | number
-  clickFn: () => void
+  clickFn: undefined | (() => void)
 
   text?: string | number
 

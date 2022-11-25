@@ -9,14 +9,14 @@ import getCentury from '@/utils/time/getCentury'
 import toggleArrayValue from '@/utils/toggleArrayValue'
 
 import splitGroup from '@/utils/splitGroup'
-import inRange from '@/utils/inRange'
 import pipe from '@/utils/pipe'
 
 import getCalendar from '@/helpers/getCalendar'
 
 export const useCalendarMultiple = (
   date: Date[],
-  setDate: (date: Date[]) => void
+  setDate: (date: Date[]) => void,
+  disabledDate: (date: Date) => boolean
 ) => {
   const [displayDate, setDisplayDate] = useState(date[0])
 
@@ -35,12 +35,15 @@ export const useCalendarMultiple = (
           setDate([...toggleArrayValue(date, val) as Date[]])
         }
 
+        const disabled = disabledDate(value)
+
+        const clickFn = disabled ? undefined : () => setDateImpl(value)
+
         return {
           ...item,
-          clickFn: () => {
-            setDateImpl(value)
-          },
-          isSelected
+          clickFn,
+          isSelected,
+          disabled
         }
       })
 

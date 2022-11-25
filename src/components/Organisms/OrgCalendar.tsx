@@ -16,11 +16,12 @@ export interface CalendarProps {
   date: Date | Date[]
   setDate: React.Dispatch<React.SetStateAction<Date>> | React.Dispatch<React.SetStateAction<Date[]>>
   mode?: Mode
+  disabledDate?: (date: Date) => boolean
   width?: number
 }
 
 const Calendar: React.FC<CalendarProps> = props => {
-  const { date, setDate, width = 350, mode = Mode.DatePicker } = props
+  const { date, setDate, width = 350, mode = Mode.DatePicker, disabledDate = () => false } = props
   if (date == undefined) {
     consola.error('date is undefined, it has to be value as Date type with default mode or Date[] type with multiple, range mode')
     return <></>
@@ -41,12 +42,12 @@ const Calendar: React.FC<CalendarProps> = props => {
   const useFn = (function () {
     switch (mode) {
       case Mode.DateRange:
-        return () => useDateRange((date as Date[]), (setDate as (date: Date[]) => any))
+        return () => useDateRange((date as Date[]), (setDate as (date: Date[]) => any), disabledDate)
       case Mode.DatePickerMultiple:
-        return () => useCalendarMultiple((date as Date[]), (setDate as (date: Date[]) => any))
+        return () => useCalendarMultiple((date as Date[]), (setDate as (date: Date[]) => any), disabledDate)
       case Mode.DatePicker:
       default:
-        return () => useCalendar((date as Date), (setDate as (date: Date) => any))
+        return () => useCalendar((date as Date), (setDate as (date: Date) => any), disabledDate)
     }
   }())
 

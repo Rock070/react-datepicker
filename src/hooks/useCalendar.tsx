@@ -5,7 +5,6 @@ import { ViewMode, CalendarBtn } from '@/types'
 
 import { get } from '@/utils/time/get'
 import getDecade from '@/utils/time/getDecade'
-import isSameTimestamp from '@/utils/time/isSameTimestamp'
 import isSameDate from '@/utils/time/isSameDate'
 import isSameYear from '@/utils/time/isSameYear'
 import isSameDecade from '@/utils/time/isSameDecade'
@@ -19,7 +18,8 @@ import isSameYearMonth from '@/helpers/isSameYearMonth'
 
 export const useCalendar = (
   date: Date,
-  setDate: (date: Date) => void
+  setDate: (date: Date) => void,
+  disabledDate: (date: Date) => boolean
 ) => {
   const [displayDate, setDisplayDate] = useState(date)
   const [viewMode, changeViewMode] = useState<ViewMode>(ViewMode.Day)
@@ -48,19 +48,24 @@ export const useCalendar = (
       const result = getCalendar(displayDate).map(item => {
         const value = item.value as Date
         const isSelected = isSameDate(value, date)
+        const disabled = disabledDate(value)
+        const clickFn = disabled
+          ? undefined
+          : () => {
+              setDisplayDate(value)
+              setDate(value)
+            }
 
         return {
           ...item,
-          clickFn: () => {
-            setDisplayDate(value)
-            setDate(value)
-          },
-          onMouseEnter: () => {
+          clickFn,
+          seEnter: () => {
           // TODO: 可以優化成用 css hover + not:hover + tailwind group
             setHoverDate(value)
           },
           isRangeHover: isRangeHoverHandler(value),
-          isSelected
+          isSelected,
+          disabled
         }
       })
 

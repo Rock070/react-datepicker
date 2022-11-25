@@ -71,16 +71,18 @@ export const MolDayBody: React.FC<MolDayBodyProps> = props => {
                         'mochi-text-gray': !item.isThisMonth,
                         'mochi-bg-blue mochi-text-white': item.isSelected,
 
-                        'mochi-hover:bg-gray-2': !item.isSelected,
+                        'mochi-hover:bg-gray-2': !item.isSelected && !item.disabled,
 
-                        'mochi-bg-gray-2': item.isRangeHover
+                        'mochi-bg-gray-2': item.isRangeHover,
+
+                        'mochi-bg-gray-3 mochi-cursor-not-allowed pointer-events-none': item.disabled
                       }
                     )}
                  >
                    { item?.time?.d }
                  </td>
                )
-             }
+              }
             </tr>
           )}
         </>

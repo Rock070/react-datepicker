@@ -16,7 +16,8 @@ import getCalendar from '@/helpers/getCalendar'
 
 export const useDateRange = (
   date: Date[],
-  setDate: (date: Date[]) => void
+  setDate: (date: Date[]) => void,
+  disabledDate: (date: Date) => boolean
 ) => {
   const [displayDate, setDisplayDate] = useState(date[0])
 
@@ -45,23 +46,28 @@ export const useDateRange = (
 
           return inRange(value, date1, date2)
         }())
+        const disabled = disabledDate(value)
+        const clickFn = disabled
+          ? undefined
+          : () => {
+              setDisplayDate(value)
+              if (isChoosingDateRange) {
+                if (value < date[0]) setDate([value, ...date])
+
+                else setDate([...date, value])
+              } else setDate([value])
+            }
 
         return {
           ...item,
-          clickFn: () => {
-            setDisplayDate(value)
-            if (isChoosingDateRange) {
-              if (value < date[0]) setDate([value, ...date])
-
-              else setDate([...date, value])
-            } else setDate([value])
-          },
+          clickFn,
           onMouseEnter: () => {
             // TODO: 可以優化成用 css hover + not:hover + tailwind group
             setHoverDate(value)
           },
           isRangeHover: isRangeHoverHandler(value),
-          isSelected
+          isSelected,
+          disabled
         }
       })
 
