@@ -9,6 +9,10 @@ const App: React.FC = () => {
   const [multipleDate, setMultipleDate] = useState([new Date()])
   const [rangeDate, setRangeDate] = useState([new Date(), new Date()])
 
+  const disabledDate = (date: Date) => {
+    return date.getDay() === 2
+  }
+
   return (
     <div className="mochi-w-screen mochi-h-screen mochi-flex mochi-justify-center mochi-items-center">
       <div className='mochi-flex mochi-flex-col mochi-items-center mochi-space-y-5 mochi-h-full mochi-pt-20'>
@@ -22,6 +26,7 @@ const App: React.FC = () => {
               date={date}
               setDate={setDate}
               mode={Mode.DatePicker}
+              disabledDate={disabledDate}
             />
           </div>
           <div>
@@ -37,6 +42,7 @@ const App: React.FC = () => {
               date={multipleDate}
               setDate={setMultipleDate}
               mode={Mode.DatePickerMultiple}
+              disabledDate={disabledDate}
             />
           </div>
           <div>
@@ -46,6 +52,7 @@ const App: React.FC = () => {
               date={rangeDate}
               setDate={setRangeDate}
               mode={Mode.DateRange}
+              disabledDate={disabledDate}
             />
           </div>
         </div>
