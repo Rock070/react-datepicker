@@ -82,8 +82,11 @@ jobs:
       - name: Setup
         run: pnpm install
 
-      - name: Test
-        run: pnpm test:run
+      - name: Unit Test
+        run: pnpm test:unit
+
+      - name: Component Test
+        run: pnpm test:component
 
   Build:
     runs-on: ubuntu-latest
