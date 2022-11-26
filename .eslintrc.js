@@ -21,6 +21,7 @@ module.exports = {
     'no-console': ['warn', {
       allow: ['warn', 'error', 'debug', 'assert']
     }],
+    'default-case': 'error',
     'arrow-parens': ['error', 'as-needed'],
     eqeqeq: 'off',
     'no-unused-vars': 'warn',
