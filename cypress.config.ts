@@ -1,6 +1,7 @@
 import { defineConfig } from 'cypress'
 
 export default defineConfig({
+  video: false,
   projectId: 'rb9uzx',
   e2e: {
     baseUrl: 'http://localhost:5173',

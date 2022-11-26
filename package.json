@@ -8,14 +8,17 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "reset": "rm -rf node_modules && pnpm i",
+
     "lint:js": "eslint --ext \".js,.tsx,.ts\" --ignore-path .gitignore .",
     "lintfix:js": "pnpm lint:js --fix",
-    "test": "vitest",
-    "test:ui": "vitest --ui",
-    "test:run": "vitest run",
+
+    "vitest:ui": "vitest --ui",
+    "test:unit": "vitest run",
+    "test:component": "cypress run --component",
     "test:type": "tsc --noEmit",
     "coverage": "vitest run --coverage",
     "cy:open": "cypress open --global",
+
     "prepare": "husky install"
   },
   "dependencies": {
