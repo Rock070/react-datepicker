@@ -29,14 +29,15 @@ const getCalendar = (date: Date): CalendarBtn[] => {
   /**
    * 當月
    */
-  const firstDayOfThisMonthTimestamp = new Date(y, m, 1).getTime()
+
+  const firstDayOfThisMonthTimestamp = new Date(y, m, 1).getTime() + DAY_MS - 1 // 取得 23:59:59 的時間
   const thisMonthDates = getMonthDate('this', daysNumInThisMonth, firstDayOfThisMonthTimestamp)
   result.push(...thisMonthDates)
   /**
    * 上月
    */
   const lastDayOfLastMonth = getLastDayOfLastMonth(date)
-  const lastDayOfLastMonthTimestamp = getTimestamp(lastDayOfLastMonth)
+  const lastDayOfLastMonthTimestamp = getTimestamp(lastDayOfLastMonth) + DAY_MS - 1 // 取得 23:59:59 的時間
   const lastMonthDates = getMonthDate('last', lastMonthDays, lastDayOfLastMonthTimestamp)
   result.unshift(...lastMonthDates)
 
@@ -44,7 +45,7 @@ const getCalendar = (date: Date): CalendarBtn[] => {
    * 下月
    */
   const firstDayOfNextMonth = getFirstDayOfNextMonth(date)
-  const firstDayOfNextMonthTimestamp = getTimestamp(firstDayOfNextMonth)
+  const firstDayOfNextMonthTimestamp = getTimestamp(firstDayOfNextMonth) + DAY_MS - 1 // 取得 23:59:59 的時間
   const nextMonthDates = getMonthDate('next', nextMonthDays, firstDayOfNextMonthTimestamp)
   result.push(...nextMonthDates)
 
