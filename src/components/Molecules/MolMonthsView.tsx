@@ -6,7 +6,6 @@ import minus from '@/utils/time/minus'
 
 import setCalculatedTime from '@/helpers/setCalculatedTime'
 
-import BasicButton from '@/components/Atoms/BasicButton'
 import BasicTable from '@/components/Atoms/BasicTable'
 import MolButtonArrowPair from '@/components/Molecules/MolButtonArrowPair'
 
@@ -62,16 +61,18 @@ export const MolMonthBody: React.FC<MolMonthBodyProp> = props => {
                 {
                   group.map((item, id) => (
                     <td key={id}>
-                      <BasicButton
-                        dataCy="mochi-calendar-month-btn"
+                      <button
+                        data-cy="mochi-calendar-month-btn"
+                        type="button"
                         onClick={item.clickFn}
                         className={cx(
                           'mochi-w-full mochi-py-3 mochi-text-center',
+                          { 'mochi-hover:bg-gray-2': !item.isSelected && !item.disabled },
                           { 'mochi-bg-blue mochi-hover:bg-blue': item.isSelected }
                         )}
                       >
                         { item.text }
-                      </BasicButton>
+                      </button>
                     </td>
                   ))
                 }
