@@ -6,6 +6,7 @@ import { ViewMode, CalendarBtn } from '@/types'
 import { get } from '@/utils/time/get'
 import getDecade from '@/utils/time/getDecade'
 import getCentury from '@/utils/time/getCentury'
+import isSameDate from '@/utils/time/isSameDate'
 import toggleArrayValue from '@/utils/toggleArrayValue'
 
 import splitGroup from '@/utils/splitGroup'
@@ -28,7 +29,8 @@ export const useCalendarMultiple = (
     const calendarDisplay = useMemo<CalendarBtn[][]>(() => {
       const result = getCalendar(displayDate).map(item => {
         const value = item.value as Date
-        const isSelected = !!date.find(item => item.valueOf() === value.valueOf())
+
+        const isSelected = !!date.find(item => isSameDate(item, value))
 
         const setDateImpl = (val: Date) => {
           setDisplayDate(val)
