@@ -62,7 +62,7 @@ jobs:
       - name: Type Checking
         run: pnpm tsc --noEmit
 
-  Test:
+  test:
     runs-on: ubuntu-latest
     steps:
       - name: Check out to my repo
@@ -87,7 +87,7 @@ jobs:
       - name: Component Test
         run: pnpm test:component
 
-  Build:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Check out to my repo
