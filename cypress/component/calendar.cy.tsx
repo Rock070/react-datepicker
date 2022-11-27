@@ -2,36 +2,78 @@
 
 import '@unocss/reset/tailwind.css'
 import { theme } from 'unocss/preset-mini'
+import random from '@/utils/random'
+import getCalendar from '@/helpers/getCalendar'
+import { MONTH_NAMES } from '@/helpers/const'
 import rgbHex from 'rgb-hex'
 import React from 'react'
 
-import Datepicker from './datepicker'
+import Datepicker, { disabledDate } from './datepicker'
 
-export const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+import type { CalendarBtn } from '@/types'
 
-describe('<datepicker>', () => {
-  beforeEach(() => {
-    cy.mount(<Datepicker />)
-  })
+beforeEach(() => {
+  cy.mount(<Datepicker />)
+})
+describe.only('init state and render check', () => {
   const today = new Date()
   const year = today.getFullYear()
   const month = MONTH_NAMES[today.getMonth()]
   const date = today.getDate()
+  const calendar = getCalendar(today)
 
   it('mounts', () => {
     cy.get('[data-cy="mochi-calendar"]').should('exist')
   })
 
-  it('check initial date value and selected date style', () => {
-    cy.get('[data-cy="mochi-calendar"] [data-cy="mochi-table-header"]').should('contain', year)
-    cy.get('[data-cy="mochi-calendar"] [data-cy="mochi-table-header"]').should('contain', month)
-    cy.get('[data-cy="mochi-calendar"] [data-cy="mochi-table-body"] [data-cy="mochi-calendar-date"]')
-      .contains(date)
-      .should('have.class', 'mochi-bg-blue')
+  it('check all date', () => {
+    cy.get('[data-cy="mochi-calendar"] [data-cy="mochi-table-body"]').within(_ => {
+      cy.wrap(calendar).each(item => {
+        const cyDate = cy.get('[data-cy="mochi-calendar-date"]')
+        const date = item as unknown as CalendarBtn
+        if (!date?.time) return
+
+        cyDate.should('contain.text', date.time.d)
+      })
+    })
   })
 
+  it('check selected date value', () => {
+    const cyHeader = cy.get('[data-cy="mochi-calendar"] [data-cy="mochi-table-header"]')
+    cyHeader.should('contain', year)
+    cyHeader.should('contain', month)
+
+    cy.get('[data-cy="mochi-calendar"] [data-cy="mochi-table-body"]').within(_ => {
+      cy.get('[data-cy="mochi-calendar-date"]')
+        .contains(date)
+        .should('have.class', 'mochi-bg-blue')
+    })
+  })
+
+  it.only('check disabled style', () => {
+    cy.get('[data-cy="mochi-calendar"] [data-cy="mochi-table-body"]').within(_ => {
+      cy.wrap(calendar).each(item => {
+        const cyDate = cy.get('[data-cy="mochi-calendar-date"]')
+        const date = item as unknown as CalendarBtn
+        if (!date?.time) return
+
+        const disabled = disabledDate(date.value as any as Date)
+
+        if (!disabled) return
+
+        const regex = new RegExp(`^${date.time.d}$`)
+        cyDate.contains(regex).should('have.class', 'mochi-calendar-disabled-date')
+      })
+    })
+  })
+})
+describe('change date, then check state and render', () => {
+  const today = new Date()
+  const year = today.getFullYear()
+  const month = MONTH_NAMES[today.getMonth()]
   it('check click date', () => {
     const year = today.getFullYear()
+
     const month = MONTH_NAMES[today.getMonth()]
 
     cy.get('[data-cy="mochi-calendar"] [data-cy="mochi-table-body"] [data-cy="mochi-calendar-date"]')
@@ -140,7 +182,7 @@ describe('<datepicker>', () => {
  */
 
 /**
- * - [ ] Hover 正常顯示「顏色」
+ * - [ ] Hover 正常顯示「顏色」（disabled, selected, normal)
  * - [ ] 點擊隨機日期可以正常顯示「顏色」
  * - [ ] 點擊隨機切換月份正常顯示月份
  * - [ ] 點擊隨機切換年份正常顯示年份

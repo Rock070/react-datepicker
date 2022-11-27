@@ -5,8 +5,11 @@ import 'virtual:uno.css'
 
 import { Mode } from '@/types'
 
+export const disabledDate = (time: Date) => time.getDay() % 2 === 0
+
 const Datepicker: React.FC = () => {
   const [date, setDate] = useState(new Date())
+  // const disabledDate = (time: Date) => time.getTime() < Date.now()
 
   return (
     <div className="mochi-w-screen mochi-h-screen mochi-flex mochi-justify-center mochi-items-center">
@@ -17,6 +20,7 @@ const Datepicker: React.FC = () => {
           <div>Date picker</div>
           <div>{date.toLocaleDateString()}</div>
           <OrgCalendar
+              disabledDate={disabledDate}
               date={date}
               setDate={setDate}
               mode={Mode.DatePicker}
