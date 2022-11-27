@@ -6,8 +6,10 @@ import { ViewMode, CalendarBtn } from '@/types'
 import { get } from '@/utils/time/get'
 import getDecade from '@/utils/time/getDecade'
 import isSameDate from '@/utils/time/isSameDate'
+import isToday from '@/utils/time/isToday'
 import getCentury from '@/utils/time/getCentury'
-import getTheDateStartTime from '@/utils/time/getTheDateStartTime'
+import getStartTimeOfTheDate from '@/utils/time/getStartTimeOfTheDate'
+import getEndTimeOfTheDate from '@/utils/time/getEndTimeOfTheDate'
 
 import splitGroup from '@/utils/splitGroup'
 import inRange from '@/utils/inRange'
@@ -45,12 +47,16 @@ export const useDateRange = (
           if (date1 === undefined) return false
           if (isChoosingDateRange) return isSameDate(value, date1)
 
-          const transformDate1 = getTheDateStartTime(date1)
-          const transformDate2 = getTheDateStartTime(date2)
+          const transformDate1 = getStartTimeOfTheDate(date1)
+          const transformDate2 = getStartTimeOfTheDate(date2)
 
           return inRange(value, transformDate1, transformDate2)
         }())
-        const disabled = disabledDate(value)
+
+        const disabled = (function () {
+          const compareDate = isToday(value) ? getEndTimeOfTheDate(value) : value
+          return disabledDate(compareDate)
+        }())
         const clickFn = disabled
           ? undefined
           : () => {

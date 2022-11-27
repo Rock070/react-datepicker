@@ -7,8 +7,10 @@ import { get } from '@/utils/time/get'
 import getDecade from '@/utils/time/getDecade'
 import getCentury from '@/utils/time/getCentury'
 import isSameDate from '@/utils/time/isSameDate'
-import toggleArrayValue from '@/utils/toggleArrayValue'
+import isToday from '@/utils/time/isToday'
+import getEndTimeOfTheDate from '@/utils/time/getEndTimeOfTheDate'
 
+import toggleArrayValue from '@/utils/toggleArrayValue'
 import splitGroup from '@/utils/splitGroup'
 import pipe from '@/utils/pipe'
 
@@ -37,7 +39,10 @@ export const useCalendarMultiple = (
           setDate([...toggleArrayValue(date, val) as Date[]])
         }
 
-        const disabled = disabledDate(value)
+        const disabled = (function () {
+          const compareDate = isToday(value) ? getEndTimeOfTheDate(value) : value
+          return disabledDate(compareDate)
+        }())
 
         const clickFn = disabled ? undefined : () => setDateImpl(value)
 

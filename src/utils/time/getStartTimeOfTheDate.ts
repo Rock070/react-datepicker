@@ -2,13 +2,13 @@
  * @example
  * ```js
  * const today = new Date() // Sun Nov 27 2022 02:56:21 GMT+0800
- * getTheDateStartTime(today) // Sun Nov 27 2022 00:00:00 GMT+0800
+ * getStartTimeOfTheDate(today) // Sun Nov 27 2022 00:00:00 GMT+0800
  * ```
  */
-const getTheDateStartTime = (date: Date) => {
+const getStartTimeOfTheDate = (date: Date) => {
   if (!(date instanceof Date)) {
     console.error(`
-      getTheDateStartTime warn, param date need to be Date type.
+      getStartTimeOfTheDate warn, param date need to be Date type.
     `)
     return date
   }
@@ -18,4 +18,4 @@ const getTheDateStartTime = (date: Date) => {
   return new Date(y, m, d)
 }
 
-export default getTheDateStartTime
+export default getStartTimeOfTheDate
