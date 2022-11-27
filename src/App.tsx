@@ -10,7 +10,6 @@ const App: React.FC = () => {
   const [rangeDate, setRangeDate] = useState([new Date(), new Date()])
 
   const disabledDate = (date: Date) => {
-    // return date.getDay() === 2
     return date.getTime() < Date.now()
   }
 

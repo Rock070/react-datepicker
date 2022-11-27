@@ -6,8 +6,10 @@ import { ViewMode, CalendarBtn } from '@/types'
 import { get } from '@/utils/time/get'
 import getDecade from '@/utils/time/getDecade'
 import isSameDate from '@/utils/time/isSameDate'
+import isToday from '@/utils/time/isToday'
 import isSameYear from '@/utils/time/isSameYear'
 import isSameDecade from '@/utils/time/isSameDecade'
+import getEndTimeOfTheDate from '@/utils/time/getEndTimeOfTheDate'
 import getCentury from '@/utils/time/getCentury'
 
 import splitGroup from '@/utils/splitGroup'
@@ -48,7 +50,12 @@ export const useCalendar = (
       const result = getCalendar(displayDate).map(item => {
         const value = item.value as Date
         const isSelected = isSameDate(value, date)
-        const disabled = disabledDate(value)
+
+        const disabled = (function () {
+          const compareDate = isToday(value) ? getEndTimeOfTheDate(value) : value
+          return disabledDate(compareDate)
+        }())
+
         const clickFn = disabled
           ? undefined
           : () => {
