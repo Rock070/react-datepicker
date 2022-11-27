@@ -75,7 +75,7 @@ export const MolDayBody: React.FC<MolDayBodyProps> = props => {
 
                         'mochi-bg-gray-2': item.isRangeHover,
 
-                        'mochi-bg-gray-3 mochi-cursor-not-allowed pointer-events-none': item.disabled
+                        'mochi-calendar-disabled-date': item.disabled
                       }
                     )}
                  >

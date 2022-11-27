@@ -13,6 +13,9 @@ export default defineConfig({
         return matcher.startsWith('mochi-')
           ? matcher.slice(6)
           : undefined // ignore
+      },
+      shortcuts: {
+        'calendar-disabled-date': 'bg-gray-3 cursor-not-allowed pointer-events-none'
       }
     })
   ],
