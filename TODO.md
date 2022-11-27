@@ -9,6 +9,7 @@
 - [ ] 禁止 1970 以前
 - [ ] 滾輪事件去切換日曆 (https://vuetifyjs.com/en/components/date-pickers/#colors)
 - [ ] __DEV__ 去顯示開發 log
+- [ ] 穩定顯示固定每月份的天數
 
 ## Bug
 
