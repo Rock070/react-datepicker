@@ -67,7 +67,12 @@ export const MolDayBody: React.FC<MolDayBodyProps> = props => {
                     role="button"
                     aria-disabled={item.disabled}
                     tabIndex={0}
-                    data-cy={['mochi-calendar-date', item.isThisMonth && 'mochi-calendar-this-month-date']}
+                    data-cy='mochi-calendar-date'
+                    { ...(item.isThisMonth
+                      ? {
+                          'data-test-id': 'mochi-calendar-this-month-date'
+                        }
+                      : null)}
                     className={cx(
                       'mochi-p-1 mochi-text-center mochi-cursor-pointer mochi-select-none',
                       {
