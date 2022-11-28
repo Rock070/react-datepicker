@@ -15,7 +15,7 @@ import type { CalendarBtn } from '@/types'
 beforeEach(() => {
   cy.mount(<Datepicker />)
 })
-describe.only('init state and render check', () => {
+describe('init state and render check', () => {
   const today = new Date()
   const year = today.getFullYear()
   const month = MONTH_NAMES[today.getMonth()]
@@ -50,7 +50,7 @@ describe.only('init state and render check', () => {
     })
   })
 
-  it.only('check disabled style', () => {
+  it('check disabled style', () => {
     cy.get('[data-cy="mochi-calendar"] [data-cy="mochi-table-body"]').within(_ => {
       cy.wrap(calendar).each(item => {
         const cyDate = cy.get('[data-cy="mochi-calendar-date"]')
@@ -70,20 +70,26 @@ describe.only('init state and render check', () => {
 describe('change date, then check state and render', () => {
   const today = new Date()
   const year = today.getFullYear()
-  const month = MONTH_NAMES[today.getMonth()]
-  it('check click date', () => {
-    const year = today.getFullYear()
+  const month = today.getMonth()
+  const monthName = MONTH_NAMES[month]
 
-    const month = MONTH_NAMES[today.getMonth()]
+  it('click every this month date and check', () => {
+    cy.get('[data-cy="mochi-calendar"]').within(_ => {
+      const cyDate = cy.get('[data-cy="mochi-calendar-date,mochi-calendar-this-month-date"]').not('.mochi-calendar-disabled-date')
+      cyDate.each(el => {
+        cy.wrap(el).click()
+        const regex = new RegExp(`^${el.text()}$`)
+        cyDate.get('.mochi-bg-blue').contains(regex)
+      })
+    })
+  })
 
-    cy.get('[data-cy="mochi-calendar"] [data-cy="mochi-table-body"] [data-cy="mochi-calendar-date"]')
-      .contains('10')
-      .click()
-    cy.get('[data-cy="mochi-calendar"] [data-cy="mochi-table-header"]').should('contain', year)
-    cy.get('[data-cy="mochi-calendar"] [data-cy="mochi-table-header"]').should('contain', month)
-    cy.get('[data-cy="mochi-calendar"] [data-cy="mochi-table-body"] [data-cy="mochi-calendar-date"]')
-      .contains('10')
-      .should('have.class', 'mochi-bg-blue')
+  it('check click disabled date', () => {
+
+  })
+
+  it('check click selected date', () => {
+
   })
 
   // https://github.com/cypress-io/cypress/issues/10#issuecomment-731839616
@@ -135,7 +141,7 @@ describe('change date, then check state and render', () => {
       .contains('10')
       .click()
     cy.get('[data-cy="mochi-calendar"] [data-cy="mochi-table-header"]').should('contain', YEAR)
-    cy.get('[data-cy="mochi-calendar"] [data-cy="mochi-table-header"]').should('contain', month)
+    cy.get('[data-cy="mochi-calendar"] [data-cy="mochi-table-header"]').should('contain', monthName)
     cy.get('[data-cy="mochi-calendar"] [data-cy="mochi-table-body"] [data-cy="mochi-calendar-date"]')
       .contains('10')
       .should('have.class', 'mochi-bg-blue')
@@ -165,7 +171,7 @@ describe('change date, then check state and render', () => {
       .contains('10')
       .click()
     cy.get('[data-cy="mochi-calendar"] [data-cy="mochi-table-header"]').should('contain', YEAR)
-    cy.get('[data-cy="mochi-calendar"] [data-cy="mochi-table-header"]').should('contain', month)
+    cy.get('[data-cy="mochi-calendar"] [data-cy="mochi-table-header"]').should('contain', monthName)
     cy.get('[data-cy="mochi-calendar"] [data-cy="mochi-table-body"] [data-cy="mochi-calendar-date"]')
       .contains('10')
       .should('have.class', 'mochi-bg-blue')
