@@ -23,13 +23,13 @@ describe('init state and render check', () => {
   const calendar = getCalendar(today)
 
   it('mounts', () => {
-    cy.get('[data-cy="mochi-calendar"]').should('exist')
+    cy.dataCy('mochi-calendar').should('exist')
   })
 
   it('check all date', () => {
-    cy.get('[data-cy="mochi-calendar"] [data-cy="mochi-table-body"]').within(_ => {
+    cy.dataCy('mochi-table-body').within(_ => {
       cy.wrap(calendar).each(item => {
-        const cyDate = cy.get('[data-cy="mochi-calendar-date"]')
+        const cyDate = cy.dataCy('mochi-calendar-date')
         const date = item as unknown as CalendarBtn
         if (!date?.time) return
 
@@ -39,21 +39,21 @@ describe('init state and render check', () => {
   })
 
   it('check selected date value', () => {
-    const cyHeader = cy.get('[data-cy="mochi-calendar"] [data-cy="mochi-table-header"]')
+    const cyHeader = cy.dataCy('mochi-table-header')
     cyHeader.should('contain', year)
     cyHeader.should('contain', month)
 
-    cy.get('[data-cy="mochi-calendar"] [data-cy="mochi-table-body"]').within(_ => {
-      cy.get('[data-cy="mochi-calendar-date"]')
+    cy.dataCy('mochi-table-body').within(_ => {
+      cy.dataCy('mochi-calendar-date')
         .contains(date)
         .should('have.class', 'mochi-bg-blue')
     })
   })
 
   it('check disabled style', () => {
-    cy.get('[data-cy="mochi-calendar"] [data-cy="mochi-table-body"]').within(_ => {
+    cy.dataCy('mochi-table-body').within(_ => {
       cy.wrap(calendar).each(item => {
-        const cyDate = cy.get('[data-cy="mochi-calendar-date"]')
+        const cyDate = cy.dataCy('mochi-calendar-date')
         const date = item as unknown as CalendarBtn
         if (!date?.time) return
 
@@ -74,8 +74,8 @@ describe('change date, then check state and render', () => {
   const monthName = MONTH_NAMES[month]
 
   it('click every this month date and check', () => {
-    cy.get('[data-cy="mochi-calendar"]').within(_ => {
-      const cyDate = cy.get('[data-test-id="mochi-calendar-this-month-date"]').not('.mochi-calendar-disabled-date')
+    cy.dataCy('mochi-calendar').within(_ => {
+      const cyDate = cy.testId('mochi-calendar-this-month-date').not('.mochi-calendar-disabled-date')
       cyDate.each(el => {
         cy.wrap(el).click()
         const regex = new RegExp(`^${el.text()}$`)
@@ -94,7 +94,7 @@ describe('change date, then check state and render', () => {
 
   // https://github.com/cypress-io/cypress/issues/10#issuecomment-731839616
   it.skip('check hover date', () => {
-    const dateEl = cy.get('[data-cy="mochi-calendar"] [data-cy="mochi-table-body"] [data-cy="mochi-calendar-date"]')
+    const dateEl = cy.dataCy('mochi-calendar-date')
 
     dateEl.contains('13').realHover()
     const color = (theme as any).colors.gray['2'].replace('#', '') as string
@@ -102,77 +102,77 @@ describe('change date, then check state and render', () => {
     dateEl.contains('13')
       .invoke('css', 'background-color')
       .then(bgColor => {
-        expect(rgbHex(bgColor as any as string)).eq(color)
+        expect(rgbHex(bgColor as string)).eq(color)
       })
   })
 
   // TODO: 優化為自動計算區間，並亂數選取
   it.skip('change month', () => {
-    const rangeBtn = cy.get('[data-cy="mochi-calendar-range-btn"]')
+    const rangeBtn = cy.dataCy('mochi-calendar-range-btn')
     rangeBtn.click()
-    const monthBtn = cy.get('[data-cy="mochi-calendar-month-btn"]')
+    const monthBtn = cy.dataCy('mochi-calendar-month-btn')
     // March
     const MARCH = MONTH_NAMES[2]
     monthBtn.contains(MARCH).click()
 
-    cy.get('[data-cy="mochi-calendar"] [data-cy="mochi-table-body"] [data-cy="mochi-calendar-date"]')
+    cy.dataCy('mochi-calendar-date')
       .contains('10')
       .click()
-    cy.get('[data-cy="mochi-calendar"] [data-cy="mochi-table-header"]').should('contain', year)
-    cy.get('[data-cy="mochi-calendar"] [data-cy="mochi-table-header"]').should('contain', MARCH)
-    cy.get('[data-cy="mochi-calendar"] [data-cy="mochi-table-body"] [data-cy="mochi-calendar-date"]')
+    cy.dataCy('mochi-table-header').should('contain', year)
+    cy.dataCy('mochi-table-header').should('contain', MARCH)
+    cy.dataCy('mochi-calendar-date')
       .contains('10')
       .should('have.class', 'mochi-bg-blue')
   })
   // TODO: 優化為自動計算區間，並亂數選取
   it.skip('change year', () => {
-    const dateRangeBtn = cy.get('[data-cy="mochi-calendar-range-btn"]')
+    const dateRangeBtn = cy.dataCy('mochi-calendar-range-btn')
     dateRangeBtn.click()
-    const monthRangeBtn = cy.get('[data-cy="mochi-calendar-range-btn"]')
+    const monthRangeBtn = cy.dataCy('mochi-calendar-range-btn')
     monthRangeBtn.click()
-    const yearBtn = cy.get('[data-cy="mochi-calendar-year-btn"]')
+    const yearBtn = cy.dataCy('mochi-calendar-year-btn')
     const YEAR = 2029
     yearBtn.contains(YEAR).click()
 
-    const monthBtn = cy.get('[data-cy="mochi-calendar-month-btn"]')
+    const monthBtn = cy.dataCy('mochi-calendar-month-btn')
     monthBtn.contains(month).click()
 
-    cy.get('[data-cy="mochi-calendar"] [data-cy="mochi-table-body"] [data-cy="mochi-calendar-date"]')
+    cy.dataCy('mochi-calendar-date')
       .contains('10')
       .click()
-    cy.get('[data-cy="mochi-calendar"] [data-cy="mochi-table-header"]').should('contain', YEAR)
-    cy.get('[data-cy="mochi-calendar"] [data-cy="mochi-table-header"]').should('contain', monthName)
-    cy.get('[data-cy="mochi-calendar"] [data-cy="mochi-table-body"] [data-cy="mochi-calendar-date"]')
+    cy.dataCy('mochi-table-header').should('contain', YEAR)
+    cy.dataCy('mochi-table-header').should('contain', monthName)
+    cy.dataCy('mochi-calendar-date')
       .contains('10')
       .should('have.class', 'mochi-bg-blue')
   })
 
   // TODO: 優化為自動計算區間，並亂數選取
   it.skip('change decade', () => {
-    const dateRangeBtn = cy.get('[data-cy="mochi-calendar-range-btn"]')
+    const dateRangeBtn = cy.dataCy('mochi-calendar-range-btn')
     dateRangeBtn.click()
-    const monthRangeBtn = cy.get('[data-cy="mochi-calendar-range-btn"]')
+    const monthRangeBtn = cy.dataCy('mochi-calendar-range-btn')
     monthRangeBtn.click()
-    const yearRangeBtn = cy.get('[data-cy="mochi-calendar-range-btn"]')
+    const yearRangeBtn = cy.dataCy('mochi-calendar-range-btn')
     yearRangeBtn.click()
 
-    const decadeBtn = cy.get('[data-cy="mochi-calendar-decade-btn"]')
+    const decadeBtn = cy.dataCy('mochi-calendar-decade-btn')
     const DECADE = '2031 - 2040'
     decadeBtn.contains(DECADE).click()
 
-    const yearBtn = cy.get('[data-cy="mochi-calendar-year-btn"]')
+    const yearBtn = cy.dataCy('mochi-calendar-year-btn')
     const YEAR = 2032
     yearBtn.contains(YEAR).click()
 
-    const monthBtn = cy.get('[data-cy="mochi-calendar-month-btn"]')
+    const monthBtn = cy.dataCy('mochi-calendar-month-btn')
     monthBtn.contains(month).click()
 
-    cy.get('[data-cy="mochi-calendar"] [data-cy="mochi-table-body"] [data-cy="mochi-calendar-date"]')
+    cy.dataCy('mochi-calendar-date')
       .contains('10')
       .click()
-    cy.get('[data-cy="mochi-calendar"] [data-cy="mochi-table-header"]').should('contain', YEAR)
-    cy.get('[data-cy="mochi-calendar"] [data-cy="mochi-table-header"]').should('contain', monthName)
-    cy.get('[data-cy="mochi-calendar"] [data-cy="mochi-table-body"] [data-cy="mochi-calendar-date"]')
+    cy.dataCy('mochi-table-header').should('contain', YEAR)
+    cy.dataCy('mochi-table-header').should('contain', monthName)
+    cy.dataCy('mochi-calendar-date')
       .contains('10')
       .should('have.class', 'mochi-bg-blue')
   })
