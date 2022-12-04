@@ -38,3 +38,25 @@ import 'cypress-real-events'
 //     }
 //   }
 // }
+
+// Cypress.Commands.add('dataCy', (selector, ...args) => {
+//   return cy.get(`[data-cy=${selector}]`, ...args)
+// })
+
+// Cypress.Commands.add('testId', (selector, ...args) => {
+//   return cy.get(`[data-test-id=${selector}]`, ...args)
+// })
+
+// Cypress.Commands.add(
+//   'testId',
+//   (subject, selector) => {
+//     return cy.wrap(subject).find(`[data-test-id=${selector}]`)
+//   }
+// )
+
+// Cypress.Commands.add(
+//   'dataCy',
+//   (subject, selector) => {
+//     return cy.wrap(subject).find(`[data-cy=${selector}]`)
+//   }
+// )
