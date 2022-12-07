@@ -88,7 +88,9 @@ jobs:
       - name: Component Test
         uses: cypress-io/github-action@v4.2.0
         with:
-          run: pnpm test:component
+          build: pnpm build
+          preview: pnpm preview
+
 
   build:
     runs-on: ubuntu-latest
