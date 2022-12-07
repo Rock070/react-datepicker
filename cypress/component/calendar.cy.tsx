@@ -1,5 +1,3 @@
-/// <reference types="Cypress" />
-
 import '@unocss/reset/tailwind.css'
 import { theme } from 'unocss/preset-mini'
 import random from '@/utils/random'
@@ -43,6 +41,10 @@ describe('init state and render check', () => {
     cyHeader.should('contain', year)
     cyHeader.should('contain', month)
 
+    const disabled = disabledDate(today as any as Date)
+
+    if (disabled) return
+
     cy.dataCy('mochi-table-body').within(_ => {
       cy.dataCy('mochi-calendar-date')
         .contains(date)
@@ -85,25 +87,42 @@ describe('change date, then check state and render', () => {
   })
 
   it('check click disabled date', () => {
+    cy.dataCy('mochi-calendar').within(_ => {
+      const cyDate = cy.get('.mochi-calendar-disabled-date')
+      cyDate.each(el => {
+        cy.wrap(el).click({ force: true })
 
+        const disabled = disabledDate(today as any as Date)
+
+        if (disabled) return
+        cyDate.get('.mochi-bg-blue').contains(today.getDate())
+      })
+    })
   })
 
   it('check click selected date', () => {
+    const disabled = disabledDate(today as any as Date)
 
+    if (disabled) return
+    cy.get('.mochi-bg-blue').click()
+
+    cy.get('.mochi-bg-blue').contains(today.getDate())
   })
 
   // https://github.com/cypress-io/cypress/issues/10#issuecomment-731839616
-  it.skip('check hover date', () => {
-    const dateEl = cy.dataCy('mochi-calendar-date')
-
-    dateEl.contains('13').realHover()
+  it('check hover date', () => {
     const color = (theme as any).colors.gray['2'].replace('#', '') as string
+
     // https://stackoverflow.com/questions/70740557/cypress-check-color-of-css-background
-    dateEl.contains('13')
-      .invoke('css', 'background-color')
-      .then(bgColor => {
-        expect(rgbHex(bgColor as string)).eq(color)
-      })
+    const cyDate = cy.testId('mochi-calendar-this-month-date').not('.mochi-calendar-disabled-date').not('.mochi-bg-blue')
+    cyDate.each(el => {
+      cy.wrap(el)
+        .realHover()
+        .invoke('css', 'background-color')
+        .then(bgColor => {
+          expect(rgbHex(bgColor as unknown as string)).eq(color)
+        })
+    })
   })
 
   // TODO: 優化為自動計算區間，並亂數選取

@@ -3,7 +3,11 @@
     "jsx": "react-jsx",
     "target": "es5",
     "lib": ["es5", "dom"],
+    "paths": {
+      "@": ["../src/."],
+      "@/*": ["../src/*"]
+    },
     "types": ["cypress", "node"]
   },
-  "include": ["**/*.ts", "../src/components/calendar.cy.ts", "../src/components/calendar.cy.ts", "./cypress.d.ts"]
+  "include": ["**/*.ts", "./cypress.d.ts"]
 }

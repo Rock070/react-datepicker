@@ -77,7 +77,7 @@ export const MolDayBody: React.FC<MolDayBodyProps> = props => {
                       'mochi-p-1 mochi-text-center mochi-cursor-pointer mochi-select-none',
                       {
                         'mochi-text-gray': !item.isThisMonth,
-                        'mochi-bg-blue mochi-text-white': item.isSelected,
+                        'mochi-bg-blue mochi-text-white': !item.disabled && item.isSelected,
 
                         'mochi-hover:bg-gray-2': !item.isSelected && !item.disabled,
 
