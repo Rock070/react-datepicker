@@ -65,6 +65,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
+
       - name: Check out to my repo
         uses: actions/checkout@v3
 
@@ -85,7 +86,9 @@ jobs:
         run: pnpm test:unit
 
       - name: Component Test
-        run: pnpm test:component
+        uses: cypress-io/github-action@v4.2.0
+        with:
+          run: pnpm test:component
 
   build:
     runs-on: ubuntu-latest
