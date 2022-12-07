@@ -41,11 +41,10 @@ describe('init state and render check', () => {
     cyHeader.should('contain', year)
     cyHeader.should('contain', month)
 
-    const disabled = disabledDate(today as any as Date)
-
-    if (disabled) return
-
     cy.dataCy('mochi-table-body').within(_ => {
+      const disabled = disabledDate(today as any as Date)
+
+      if (disabled) return
       cy.dataCy('mochi-calendar-date')
         .contains(date)
         .should('have.class', 'mochi-bg-blue')
