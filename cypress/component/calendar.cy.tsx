@@ -43,6 +43,7 @@ describe('init state and render check', () => {
 
     cy.dataCy('mochi-table-body').within(_ => {
       const disabled = disabledDate(today as any as Date)
+      console.log(disabled)
 
       if (disabled) return
       cy.dataCy('mochi-calendar-date')
