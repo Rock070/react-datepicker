@@ -64,18 +64,26 @@ export const MolDayBody: React.FC<MolDayBodyProps> = props => {
                     key={ item.timestamp }
                     onClick={item.clickFn}
                     onMouseEnter={item.onMouseEnter}
-                    data-cy="mochi-calendar-date"
+                    role="button"
+                    aria-disabled={item.disabled}
+                    tabIndex={0}
+                    data-cy='mochi-calendar-date'
+                    { ...(item.isThisMonth
+                      ? {
+                          'data-test-id': 'mochi-calendar-this-month-date'
+                        }
+                      : null)}
                     className={cx(
                       'mochi-p-1 mochi-text-center mochi-cursor-pointer mochi-select-none',
                       {
                         'mochi-text-gray': !item.isThisMonth,
-                        'mochi-bg-blue mochi-text-white': item.isSelected,
+                        'mochi-bg-blue mochi-text-white': !item.disabled && item.isSelected,
 
                         'mochi-hover:bg-gray-2': !item.isSelected && !item.disabled,
 
                         'mochi-bg-gray-2': item.isRangeHover,
 
-                        'mochi-bg-gray-3 mochi-cursor-not-allowed pointer-events-none': item.disabled
+                        'mochi-calendar-disabled-date': item.disabled
                       }
                     )}
                  >

@@ -1,5 +1,3 @@
-/// <reference types="cypress" />
-
 import 'cypress-real-events'
 
 // ***********************************************
@@ -38,3 +36,15 @@ import 'cypress-real-events'
 //     }
 //   }
 // }
+
+Cypress.Commands.add(
+  'dataCy',
+  (value: string) => {
+    return cy.get(`[data-cy=${value}]`)
+  })
+
+Cypress.Commands.add(
+  'testId',
+  (value: string) => {
+    return cy.get(`[data-test-id=${value}]`)
+  })

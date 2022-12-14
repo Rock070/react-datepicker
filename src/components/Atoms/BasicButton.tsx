@@ -27,7 +27,7 @@ const BasicButton: React.FC<Props> = ({
         'mochi-py-0.5 mochi-px-1 mochi-rounded-sm',
         className,
         {
-          'mochi-cursor-not-allowed mochi-pointer-events-none mochi-bg-gray-3': disabled,
+          'calendar-disabled-date': disabled,
           'mochi-hover:bg-gray-2': !disabled
         }
       )}
