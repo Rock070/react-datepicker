@@ -6,10 +6,9 @@ import 'virtual:uno.css'
 import { Mode } from '@/types'
 
 export const disabledDate = (time: Date) => time.getDay() % 2 === 0
-
+export const targetDate = new Date(2022, 11, 9)
 const Datepicker: React.FC = () => {
-  const [date, setDate] = useState(new Date())
-  // const disabledDate = (time: Date) => time.getTime() < Date.now()
+  const [date, setDate] = useState(targetDate)
 
   return (
     <div className="mochi-w-screen mochi-h-screen mochi-flex mochi-justify-center mochi-items-center">

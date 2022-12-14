@@ -1,31 +1,27 @@
 import '@unocss/reset/tailwind.css'
 import { theme } from 'unocss/preset-mini'
-import random from '@/utils/random'
+// import random from '@/utils/random'
 import getCalendar from '@/helpers/getCalendar'
 import { MONTH_NAMES } from '@/helpers/const'
 import rgbHex from 'rgb-hex'
 import React from 'react'
 
-import Datepicker, { disabledDate } from './datepicker'
+import Datepicker, { disabledDate, targetDate } from './datepicker'
 
 import type { CalendarBtn } from '@/types'
 
 beforeEach(() => {
-  cy.mount(<Datepicker />)
+  cy.clock(targetDate.getTime())
+  cy.mount(<Datepicker/>)
 })
 describe('init state and render check', () => {
-  const today = new Date()
-  const year = today.getFullYear()
-  const month = MONTH_NAMES[today.getMonth()]
-  const date = today.getDate()
-  const calendar = getCalendar(today)
-
   it('mounts', () => {
     cy.dataCy('mochi-calendar').should('exist')
   })
 
   it('check all date', () => {
     cy.dataCy('mochi-table-body').within(_ => {
+      const calendar = getCalendar(new Date())
       cy.wrap(calendar).each(item => {
         const cyDate = cy.dataCy('mochi-calendar-date')
         const date = item as unknown as CalendarBtn
@@ -37,21 +33,25 @@ describe('init state and render check', () => {
   })
 
   it('check selected date value', () => {
+    const today = new Date()
+    const year = today.getFullYear()
+    const month = MONTH_NAMES[today.getMonth()]
+    const date = today.getDate()
+
     const cyHeader = cy.dataCy('mochi-table-header')
     cyHeader.should('contain', year)
     cyHeader.should('contain', month)
 
     cy.dataCy('mochi-table-body').within(_ => {
-      const disabled = disabledDate(today as any as Date)
-
-      if (disabled) return
+      const regex = new RegExp(`^${date}$`)
       cy.dataCy('mochi-calendar-date')
-        .contains(date)
+        .contains(regex)
         .should('have.class', 'mochi-bg-blue')
     })
   })
 
   it('check disabled style', () => {
+    const calendar = getCalendar(new Date())
     cy.dataCy('mochi-table-body').within(_ => {
       cy.wrap(calendar).each(item => {
         const cyDate = cy.dataCy('mochi-calendar-date')
@@ -87,22 +87,19 @@ describe('change date, then check state and render', () => {
 
   it('check click disabled date', () => {
     cy.dataCy('mochi-calendar').within(_ => {
+      const today = new Date()
       const cyDate = cy.get('.mochi-calendar-disabled-date')
       cyDate.each(el => {
         cy.wrap(el).click({ force: true })
 
-        const disabled = disabledDate(today as any as Date)
-
-        if (disabled) return
         cyDate.get('.mochi-bg-blue').contains(today.getDate())
       })
     })
   })
 
   it('check click selected date', () => {
-    const disabled = disabledDate(today as any as Date)
+    const today = new Date()
 
-    if (disabled) return
     cy.get('.mochi-bg-blue').click()
 
     cy.get('.mochi-bg-blue').contains(today.getDate())
