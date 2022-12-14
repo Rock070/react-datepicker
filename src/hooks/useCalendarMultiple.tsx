@@ -6,17 +6,20 @@ import { ViewMode, CalendarBtn } from '@/types'
 import { get } from '@/utils/time/get'
 import getDecade from '@/utils/time/getDecade'
 import getCentury from '@/utils/time/getCentury'
-import toggleArrayValue from '@/utils/toggleArrayValue'
+import isSameDate from '@/utils/time/isSameDate'
+import isToday from '@/utils/time/isToday'
+import getEndTimeOfTheDate from '@/utils/time/getEndTimeOfTheDate'
 
+import toggleArrayValue from '@/utils/toggleArrayValue'
 import splitGroup from '@/utils/splitGroup'
-import inRange from '@/utils/inRange'
 import pipe from '@/utils/pipe'
 
 import getCalendar from '@/helpers/getCalendar'
 
 export const useCalendarMultiple = (
   date: Date[],
-  setDate: (date: Date[]) => void
+  setDate: (date: Date[]) => void,
+  disabledDate: (date: Date) => boolean
 ) => {
   const [displayDate, setDisplayDate] = useState(date[0])
 
@@ -28,19 +31,26 @@ export const useCalendarMultiple = (
     const calendarDisplay = useMemo<CalendarBtn[][]>(() => {
       const result = getCalendar(displayDate).map(item => {
         const value = item.value as Date
-        const isSelected = !!date.find(item => item.valueOf() === value.valueOf())
+
+        const isSelected = !!date.find(item => isSameDate(item, value))
 
         const setDateImpl = (val: Date) => {
           setDisplayDate(val)
           setDate([...toggleArrayValue(date, val) as Date[]])
         }
 
+        const disabled = (function () {
+          const compareDate = isToday(value) ? getEndTimeOfTheDate(value) : value
+          return disabledDate(compareDate)
+        }())
+
+        const clickFn = disabled ? undefined : () => setDateImpl(value)
+
         return {
           ...item,
-          clickFn: () => {
-            setDateImpl(value)
-          },
-          isSelected
+          clickFn,
+          isSelected,
+          disabled
         }
       })
 

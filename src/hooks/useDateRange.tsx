@@ -5,8 +5,11 @@ import { ViewMode, CalendarBtn } from '@/types'
 
 import { get } from '@/utils/time/get'
 import getDecade from '@/utils/time/getDecade'
-import isSameTimestamp from '@/utils/time/isSameTimestamp'
+import isSameDate from '@/utils/time/isSameDate'
+import isToday from '@/utils/time/isToday'
 import getCentury from '@/utils/time/getCentury'
+import getStartTimeOfTheDate from '@/utils/time/getStartTimeOfTheDate'
+import getEndTimeOfTheDate from '@/utils/time/getEndTimeOfTheDate'
 
 import splitGroup from '@/utils/splitGroup'
 import inRange from '@/utils/inRange'
@@ -16,7 +19,8 @@ import getCalendar from '@/helpers/getCalendar'
 
 export const useDateRange = (
   date: Date[],
-  setDate: (date: Date[]) => void
+  setDate: (date: Date[]) => void,
+  disabledDate: (date: Date) => boolean
 ) => {
   const [displayDate, setDisplayDate] = useState(date[0])
 
@@ -41,27 +45,39 @@ export const useDateRange = (
         const isSelected = (function () {
           const [date1, date2] = date
           if (date1 === undefined) return false
-          if (isChoosingDateRange) return isSameTimestamp(value, date1)
+          if (isChoosingDateRange) return isSameDate(value, date1)
 
-          return inRange(value, date1, date2)
+          const transformDate1 = getStartTimeOfTheDate(date1)
+          const transformDate2 = getStartTimeOfTheDate(date2)
+
+          return inRange(value, transformDate1, transformDate2)
         }())
+
+        const disabled = (function () {
+          const compareDate = isToday(value) ? getEndTimeOfTheDate(value) : value
+          return disabledDate(compareDate)
+        }())
+        const clickFn = disabled
+          ? undefined
+          : () => {
+              setDisplayDate(value)
+              if (isChoosingDateRange) {
+                if (value < date[0]) setDate([value, ...date])
+
+                else setDate([...date, value])
+              } else setDate([value])
+            }
 
         return {
           ...item,
-          clickFn: () => {
-            setDisplayDate(value)
-            if (isChoosingDateRange) {
-              if (value < date[0]) setDate([value, ...date])
-
-              else setDate([...date, value])
-            } else setDate([value])
-          },
+          clickFn,
           onMouseEnter: () => {
             // TODO: 可以優化成用 css hover + not:hover + tailwind group
             setHoverDate(value)
           },
           isRangeHover: isRangeHoverHandler(value),
-          isSelected
+          isSelected,
+          disabled
         }
       })
 

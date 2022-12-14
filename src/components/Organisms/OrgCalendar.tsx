@@ -2,39 +2,52 @@ import React from 'react'
 import { useCalendar } from '@/hooks/useCalendar'
 import { useDateRange } from '@/hooks/useDateRange'
 import { useCalendarMultiple } from '@/hooks/useCalendarMultiple'
+import consola from 'consola'
 
 import MolDay from '@/components/Molecules/MolDaysView'
 import MolMonth from '@/components/Molecules/MolMonthsView'
 import MolYear from '@/components/Molecules/MolYearsView'
 import MolDecade from '@/components/Molecules/MolDecadesView'
-
 import { isArray } from '@/utils/is'
 
 import { ViewMode, Mode } from '@/types'
 
 export interface CalendarProps {
-  mode: Mode
   date: Date | Date[]
   setDate: React.Dispatch<React.SetStateAction<Date>> | React.Dispatch<React.SetStateAction<Date[]>>
+  mode?: Mode
+  disabledDate?: (date: Date) => boolean
   width?: number
 }
 
 const Calendar: React.FC<CalendarProps> = props => {
-  const { date, setDate, width = 350, mode } = props
+  const { date, setDate, width = 350, mode = Mode.DatePicker, disabledDate = () => false } = props
+  if (date == undefined) {
+    consola.error('date is undefined, it has to be value as Date type with default mode or Date[] type with multiple, range mode')
+    return <></>
+  }
+  if (setDate == undefined) {
+    consola.error('setDate is undefined')
+    return <></>
+  }
+  if (mode == undefined) {
+    consola.error('mode')
+    return <></>
+  }
   if ((mode & Mode.DateRange) && !isArray(date)) {
-    console.error('Date need to be array type')
+    consola.error('Date need to be array type')
     return <></>
   }
 
   const useFn = (function () {
     switch (mode) {
       case Mode.DateRange:
-        return () => useDateRange((date as Date[]), (setDate as (date: Date[]) => any))
+        return () => useDateRange((date as Date[]), (setDate as (date: Date[]) => any), disabledDate)
       case Mode.DatePickerMultiple:
-        return () => useCalendarMultiple((date as Date[]), (setDate as (date: Date[]) => any))
+        return () => useCalendarMultiple((date as Date[]), (setDate as (date: Date[]) => any), disabledDate)
       case Mode.DatePicker:
       default:
-        return () => useCalendar((date as Date), (setDate as (date: Date) => any))
+        return () => useCalendar((date as Date), (setDate as (date: Date) => any), disabledDate)
     }
   }())
 
@@ -58,13 +71,12 @@ const Calendar: React.FC<CalendarProps> = props => {
   }())
 
   return (
-    <div className="space-y-6">
-      <div/>
+    <div data-cy="mochi-calendar" className="mochi-space-y-6">
       <div
         style={{ width: `${width}px` }}
         className='
-          text-sm bg-blend-soft-light
-          shadow-sm shadow-gray
+          mochi-text-sm mochi-bg-blend-soft-light
+          mochi-shadow-sm mochi-shadow-gray
         '
       >
         <DisplayView

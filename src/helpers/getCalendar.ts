@@ -12,8 +12,11 @@ import { DAYS_NUM_IN_ONE_ROW, DAY_MS } from '@/helpers/const'
 
 import type { CalendarBtn } from '@/types'
 
+type MonthDate = 'this' | 'last' | 'next'
+
 const getCalendar = (date: Date): CalendarBtn[] => {
   const { y, m } = get(date)
+
   const firstDayOfMonth = getFirstDayOfMonth(date)
   const lastDayOfMonth = getLastDayOfMonth(date)
   const { day: firstDayOfMonthDay } = get(firstDayOfMonth)
@@ -27,44 +30,42 @@ const getCalendar = (date: Date): CalendarBtn[] => {
   /**
    * 當月
    */
-  for (let i = 1; i <= daysNumInThisMonth; i++) {
-    const targetDate = new Date(y, m, i)
-    result.push({
-      timestamp: getTimestamp(targetDate),
-      time: get(targetDate),
-      value: targetDate,
-      clickFn: () => {},
-      disabled: false,
-      isSelected: false,
-      isThisMonth: true
-    })
-  }
+
+  const firstDayOfThisMonthTimestamp = new Date(y, m, 1).getTime()
+  const thisMonthDates = getMonthDate('this', daysNumInThisMonth, firstDayOfThisMonthTimestamp)
+  result.push(...thisMonthDates)
   /**
    * 上月
    */
   const lastDayOfLastMonth = getLastDayOfLastMonth(date)
   const lastDayOfLastMonthTimestamp = getTimestamp(lastDayOfLastMonth)
-  for (let i = 0; i < lastMonthDays; i++) {
-    const timestamp = lastDayOfLastMonthTimestamp - (i * DAY_MS)
-    const targetDate = new Date(timestamp)
+  const lastMonthDates = getMonthDate('last', lastMonthDays, lastDayOfLastMonthTimestamp)
+  result.unshift(...lastMonthDates)
 
-    result.unshift({
-      timestamp,
-      value: targetDate,
-      time: get(targetDate),
-      clickFn: () => {},
-      disabled: false,
-      isSelected: false,
-      isThisMonth: false
-    })
-  }
   /**
    * 下月
    */
   const firstDayOfNextMonth = getFirstDayOfNextMonth(date)
   const firstDayOfNextMonthTimestamp = getTimestamp(firstDayOfNextMonth)
-  for (let i = 0; i < nextMonthDays; i++) {
-    const timestamp = firstDayOfNextMonthTimestamp + (i * DAY_MS)
+  const nextMonthDates = getMonthDate('next', nextMonthDays, firstDayOfNextMonthTimestamp)
+  result.push(...nextMonthDates)
+
+  return result
+}
+
+const getMonthDate = (type: MonthDate, days: number, baseTimestamp: number): CalendarBtn[] => {
+  const result = []
+  for (let i = 0; i < days; i++) {
+    const timestamp = (function () {
+      switch (type) {
+        case 'last' :
+          return baseTimestamp - (i * DAY_MS)
+        case 'next' :
+        case 'this' :
+        default:
+          return baseTimestamp + (i * DAY_MS)
+      }
+    }())
     const targetDate = new Date(timestamp)
 
     result.push({
@@ -74,9 +75,11 @@ const getCalendar = (date: Date): CalendarBtn[] => {
       clickFn: () => {},
       disabled: false,
       isSelected: false,
-      isThisMonth: false
+      isThisMonth: type === 'this'
     })
   }
+
+  if (type === 'last') return result.reverse()
   return result
 }
 

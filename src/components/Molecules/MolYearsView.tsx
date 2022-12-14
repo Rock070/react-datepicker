@@ -64,11 +64,12 @@ export const MolYearBody: React.FC<MolYearBodyProp> = props => {
                     group.map((item, id) => (
                       <td key={id}>
                         <BasicButton
+                          dataCy="mochi-calendar-year-btn"
                           onClick={item.clickFn}
                           className={cx(
-                            'w-full px-3 py-3 text-center',
+                            'mochi-w-full mochi-px-3 mochi-py-3 mochi-text-center',
                             {
-                              'bg-blue hover:bg-blue': item.isSelected
+                              'mochi-bg-blue mochi-hover:bg-blue': item.isSelected
                             }
                           )}
                         >

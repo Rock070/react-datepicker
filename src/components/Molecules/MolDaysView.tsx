@@ -61,25 +61,36 @@ export const MolDayBody: React.FC<MolDayBodyProps> = props => {
               {
                group.map(item =>
                  <td
-                   key={ item.timestamp }
-                   onClick={item.clickFn}
-                  onMouseEnter={item.onMouseEnter}
-                   className={cx(
-                     'p1 text-center cursor-pointer select-none',
-                     {
-                       'text-gray': !item.isThisMonth,
-                       'bg-blue text-white': item.isSelected,
+                    key={ item.timestamp }
+                    onClick={item.clickFn}
+                    onMouseEnter={item.onMouseEnter}
+                    role="button"
+                    aria-disabled={item.disabled}
+                    tabIndex={0}
+                    data-cy='mochi-calendar-date'
+                    { ...(item.isThisMonth
+                      ? {
+                          'data-test-id': 'mochi-calendar-this-month-date'
+                        }
+                      : null)}
+                    className={cx(
+                      'mochi-p-1 mochi-text-center mochi-cursor-pointer mochi-select-none',
+                      {
+                        'mochi-text-gray': !item.isThisMonth,
+                        'mochi-bg-blue mochi-text-white': !item.disabled && item.isSelected,
 
-                       'hover:bg-gray-2': !item.isSelected,
+                        'mochi-hover:bg-gray-2': !item.isSelected && !item.disabled,
 
-                       'bg-gray-2': item.isRangeHover
-                     }
-                   )}
+                        'mochi-bg-gray-2': item.isRangeHover,
+
+                        'mochi-calendar-disabled-date': item.disabled
+                      }
+                    )}
                  >
                    { item?.time?.d }
                  </td>
                )
-             }
+              }
             </tr>
           )}
         </>

@@ -5,9 +5,11 @@ import { ViewMode, CalendarBtn } from '@/types'
 
 import { get } from '@/utils/time/get'
 import getDecade from '@/utils/time/getDecade'
-import isSameTimestamp from '@/utils/time/isSameTimestamp'
+import isSameDate from '@/utils/time/isSameDate'
+import isToday from '@/utils/time/isToday'
 import isSameYear from '@/utils/time/isSameYear'
 import isSameDecade from '@/utils/time/isSameDecade'
+import getEndTimeOfTheDate from '@/utils/time/getEndTimeOfTheDate'
 import getCentury from '@/utils/time/getCentury'
 
 import splitGroup from '@/utils/splitGroup'
@@ -18,7 +20,8 @@ import isSameYearMonth from '@/helpers/isSameYearMonth'
 
 export const useCalendar = (
   date: Date,
-  setDate: (date: Date) => void
+  setDate: (date: Date) => void,
+  disabledDate: (date: Date) => boolean
 ) => {
   const [displayDate, setDisplayDate] = useState(date)
   const [viewMode, changeViewMode] = useState<ViewMode>(ViewMode.Day)
@@ -46,22 +49,30 @@ export const useCalendar = (
     const calendarDisplay = useMemo<CalendarBtn[][]>(() => {
       const result = getCalendar(displayDate).map(item => {
         const value = item.value as Date
-        const isSelected = (function () {
-          return isSameTimestamp(value, date)
+        const isSelected = isSameDate(value, date)
+
+        const disabled = (function () {
+          const compareDate = isToday(value) ? getEndTimeOfTheDate(value) : value
+          return disabledDate(compareDate)
         }())
+
+        const clickFn = disabled
+          ? undefined
+          : () => {
+              setDisplayDate(value)
+              setDate(value)
+            }
 
         return {
           ...item,
-          clickFn: () => {
-            setDisplayDate(value)
-            setDate(value)
-          },
-          onMouseEnter: () => {
+          clickFn,
+          seEnter: () => {
           // TODO: 可以優化成用 css hover + not:hover + tailwind group
             setHoverDate(value)
           },
           isRangeHover: isRangeHoverHandler(value),
-          isSelected
+          isSelected,
+          disabled
         }
       })
 

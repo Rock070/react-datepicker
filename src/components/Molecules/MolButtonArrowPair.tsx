@@ -23,7 +23,7 @@ const MolButtonArrowPair: React.FC<Props> = props => {
   const { isDoubleArrow, handler, displayTitle, displayTitleHandler, titleDisabled } = props
 
   return (
-    <div className="flex justify-between items-center">
+    <div className="mochi-flex mochi-justify-between mochi-items-center">
       <div>
         {
           isDoubleArrow &&
@@ -35,7 +35,7 @@ const MolButtonArrowPair: React.FC<Props> = props => {
           <Icon icon="akar-icons:chevron-left" />
         </BasicButton>
       </div>
-      <BasicButton onClick={displayTitleHandler} disabled={titleDisabled}>{displayTitle}</BasicButton>
+      <BasicButton dataCy="mochi-calendar-range-btn" onClick={displayTitleHandler} disabled={titleDisabled}>{displayTitle}</BasicButton>
       <div>
         <BasicButton onClick={handler?.right}>
           <Icon icon="akar-icons:chevron-right" />

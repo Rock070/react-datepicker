@@ -9,12 +9,17 @@ const App: React.FC = () => {
   const [multipleDate, setMultipleDate] = useState([new Date()])
   const [rangeDate, setRangeDate] = useState([new Date(), new Date()])
 
+  const disabledDate = (date: Date) => {
+    // return date.getTime() < Date.now()
+    return date.getDay() % 2 === 0
+  }
+
   return (
-    <div className="w-screen h-screen flex justify-center items-center">
-      <div className='flex flex-col items-center space-y-5 h-full pt-20'>
+    <div className="mochi-w-screen mochi-h-screen mochi-flex mochi-justify-center mochi-items-center">
+      <div className='mochi-flex mochi-flex-col mochi-items-center mochi-space-y-5 mochi-h-full mochi-pt-20'>
         <img src={reactLogo} alt="logo" />
 
-        <div className="grid grid-cols-2 gap-10 text-center">
+        <div className="mochi-grid mochi-grid-cols-2 mochi-gap-10 mochi-text-center">
           <div>
             <div>Calendar</div>
             <div>{date.toLocaleDateString()}</div>
@@ -22,6 +27,7 @@ const App: React.FC = () => {
               date={date}
               setDate={setDate}
               mode={Mode.DatePicker}
+              disabledDate={disabledDate}
             />
           </div>
           <div>
@@ -37,6 +43,7 @@ const App: React.FC = () => {
               date={multipleDate}
               setDate={setMultipleDate}
               mode={Mode.DatePickerMultiple}
+              disabledDate={disabledDate}
             />
           </div>
           <div>
@@ -46,6 +53,7 @@ const App: React.FC = () => {
               date={rangeDate}
               setDate={setRangeDate}
               mode={Mode.DateRange}
+              disabledDate={disabledDate}
             />
           </div>
         </div>

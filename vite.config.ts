@@ -8,7 +8,16 @@ import { resolve } from 'path'
 export default defineConfig({
   plugins: [
     react(),
-    Unocss()
+    Unocss({
+      preprocess (matcher) {
+        return matcher.startsWith('mochi-')
+          ? matcher.slice(6)
+          : undefined // ignore
+      },
+      shortcuts: {
+        'calendar-disabled-date': 'bg-gray-3 cursor-not-allowed pointer-events-none'
+      }
+    })
   ],
   resolve: {
     alias: {

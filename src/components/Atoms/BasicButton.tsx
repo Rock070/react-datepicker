@@ -2,6 +2,7 @@ import React from 'react'
 import cx from 'classnames'
 
 interface Props {
+  dataCy?: string
   type?: 'button' | 'submit' | 'reset'
   className?: string
   disabled?: boolean
@@ -10,6 +11,7 @@ interface Props {
 }
 
 const BasicButton: React.FC<Props> = ({
+  dataCy = '',
   type = 'button',
   onClick = () => {},
   className = '',
@@ -20,12 +22,13 @@ const BasicButton: React.FC<Props> = ({
     <button
       type={type}
       onClick={onClick}
+      data-cy={dataCy}
       className={cx(
-        'py-0.5 px-1 rounded-sm',
+        'mochi-py-0.5 mochi-px-1 mochi-rounded-sm',
         className,
         {
-          'cursor-not-allowed pointer-events-none bg-gray-3': disabled,
-          'hover:bg-gray-2': !disabled
+          'calendar-disabled-date': disabled,
+          'mochi-hover:bg-gray-2': !disabled
         }
       )}
     >
